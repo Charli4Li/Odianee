@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ODIANEE — The Floating Gallery & Heritage</title>
+  <meta name="description" content="An immersive 3D journey through the art, heritage, and timeless culinary culture of Odisha — replicated in the iconic floating gallery experience." />
+  <link rel="icon" href="assets/logo.png" type="image/png" />
+
+  <!-- Google Fonts: Kalnia & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kalnia:wght@100..700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Local Vendor Libraries -->
+  <script src="assets/libs/three.min.js"></script>
+  <script src="assets/libs/gsap.min.js"></script>
+  <script src="assets/libs/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+  <!-- Fixed Global Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <nav class="main-nav">
+        <a href="#collection" class="nav-link active" data-view="collection">Collection</a>
+        <a href="#history" class="nav-link" data-view="history">History</a>
+        <a href="#process" class="nav-link" data-view="process">Making Of</a>
+      </nav>
+      <div class="header-credit">
+        <span>Curated for</span>
+        <a href="#collection" data-view="collection"><span>ODIANEE</span></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- App Views Container -->
+  <div id="app">
+
+    <!-- ========================================================
+         VIEW 1: COLLECTION (3D Interactive Canvas)
+         ======================================================== -->
+    <main id="view-collection" class="view-layer active">
+      <div class="canvas-bg"></div>
+      
+      <!-- 3D WebGL Canvas Container -->
+      <div id="canvas-container">
+        <canvas id="webgl-canvas"></canvas>
+      </div>
+
+      <!-- Center Restaurant Logo Hero Section -->
+      <section class="center-hero">
+        <div class="logo-wrap">
+          <img src="assets/logo.png" alt="ODIANEE Restaurant Logo" class="restaurant-logo" id="main-restaurant-logo" />
+          <p class="hero-subtitle">The Floating Gallery</p>
+        </div>
+      </section>
+
+      <!-- Bottom View Switcher Pill -->
+      <div class="bottom-controls">
+        <div class="view-switcher-pill">
+          <span class="view-label">Change the View :</span>
+          <button id="btn-sphere" class="view-btn active">sphere</button>
+          <button id="btn-cylinder" class="view-btn">cylinder</button>
+        </div>
+      </div>
+
+      <!-- Detail Modal Overlay (when card is clicked) -->
+      <div id="detail-modal" class="detail-modal">
+        <button id="detail-close-btn" class="detail-close-btn">
+          <span>&#x2715;</span> Close
+        </button>
+        <div class="detail-body">
+          <div class="detail-title-col">
+            <span id="detail-meta" class="detail-meta-badge">18th Century &bull; Kangra School</span>
+            <h1 id="detail-title" class="detail-title">Radha &amp; Krishna</h1>
+            <div id="detail-tags" class="detail-tags"></div>
+          </div>
+          <div class="detail-desc-col">
+            <p id="detail-desc" class="detail-desc"></p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ========================================================
+         VIEW 2: HISTORY (Horizontal Scroll Gallery)
+         ======================================================== -->
+    <section id="view-history" class="view-layer">
+      <img src="assets/background.png" class="history-bg" alt="History Texture Background" />
+      <div id="history-progress" class="history-progress"></div>
+
+      <!-- Section 01 -->
+      <article class="scroll-section">
+        <div class="section-wrapper">
+          <div class="section-content">
+            <p class="section-num">01</p>
+            <div class="section-title-wrap">
+              <h2 class="section-title">What Is Pahari Art?</h2>
+            </div>
+            <div class="section-para-wrap">
+              <p class="section-para">Pahari painting is a tradition of miniature painting that flourished in the Himalayan foothills of North India, celebrating intense emotional resonance, delicate naturalism, and timeless spiritual devotion.</p>
+            </div>
+          </div>
+          <div class="section-image-box">
+            <img class="section-img" src="assets/history/history-art-1.png" alt="What Is Pahari Art" />
+          </div>
+        </div>
+      </article>
+
+      <!-- Section 02 -->
+      <article class="scroll-section">
+        <div class="section-wrapper">
+          <div class="section-content">
+            <p class="section-num">02</p>
+            <div class="section-title-wrap">
+              <h2 class="section-title">The Origins</h2>
+            </div>
+            <div class="section-para-wrap">
+              <p class="section-para">The origins of Pahari painting lie in the decline of the Mughal Empire and the migration of skilled atelier artists to the tranquil, mountain-guarded valleys of northern India.</p>
+            </div>
+          </div>
+          <div class="section-image-box">
+            <img class="section-img" src="assets/history/history-art-2.png" alt="The Origins" />
+          </div>
+        </div>
+      </article>
+
+      <!-- Section 03 -->
+      <article class="scroll-section">
+        <div class="section-wrapper">
+          <div class="section-content">
+            <p class="section-num">03</p>
+            <div class="section-title-wrap">
+              <h2 class="section-title">The Schools</h2>
+            </div>
+            <div class="section-para-wrap">
+              <p class="section-para">Basohli, Guler, Kangra, Chamba, and Mandi each shaped unique visual languages — from vibrant unmixed pigments and beetle-wing jewel effects to soft poetic lyrical realism.</p>
+            </div>
+          </div>
+          <div class="section-image-box">
+            <img class="section-img" src="assets/history/history-art-3.png" alt="The Schools" />
+          </div>
+        </div>
+      </article>
+
+      <!-- Section 04 -->
+      <article class="scroll-section">
+        <div class="section-wrapper">
+          <div class="section-content">
+            <p class="section-num">04</p>
+            <div class="section-title-wrap">
+              <h2 class="section-title">The Subjects</h2>
+            </div>
+            <div class="section-para-wrap">
+              <p class="section-para">Love, devotion, musical modes (Ragamala), poetry, and mythology became the living soul of Pahari art, capturing the intimate dialogue between human sentiment and cosmic beauty.</p>
+            </div>
+          </div>
+          <div class="section-image-box">
+            <img class="section-img" src="assets/history/history-art-4.png" alt="The Subjects" />
+          </div>
+        </div>
+      </article>
+
+      <!-- Section 05 -->
+      <article class="scroll-section">
+        <div class="section-wrapper">
+          <div class="section-content">
+            <p class="section-num">05</p>
+            <div class="section-title-wrap">
+              <h2 class="section-title">Legacy</h2>
+            </div>
+            <div class="section-para-wrap">
+              <p class="section-para">Today, Pahari paintings are celebrated worldwide in premier museums as enduring masterpieces of poetic storytelling, fine draughtsmanship, and transcendent aesthetic grace.</p>
+            </div>
+          </div>
+          <div class="section-image-box">
+            <img class="section-img" src="assets/history/history-art-5.png" alt="Legacy" />
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ========================================================
+         VIEW 3: MAKING OF / PROCESS (Interactive Card Stack)
+         ======================================================== -->
+    <section id="view-process" class="view-layer">
+      <img src="assets/background4.png" class="process-bg" alt="Process Background" />
+      <div class="process-container">
+        <div class="process-pin-wrapper">
+          <div class="process-main">
+            
+            <!-- Left Text Column -->
+            <div class="process-text-col">
+              <h1 class="process-main-title">The Art of Making</h1>
+              <div class="dynamic-text-stage">
+                
+                <div class="dynamic-text-item active" data-step="0">
+                  <span class="dynamic-step-label">STEP 1</span>
+                  <h2 class="dynamic-step-title">The Paper and the Ground</h2>
+                  <p class="dynamic-step-desc">Most Pahari paintings were executed on wasli — a laminated sheet made by pasting several layers of paper together, then rubbing the surface smooth with a polished agate stone until it acquired a near-enamelled finish.</p>
+                </div>
+
+                <div class="dynamic-text-item" data-step="1">
+                  <span class="dynamic-step-label">STEP 2</span>
+                  <h2 class="dynamic-step-title">The Pigments</h2>
+                  <p class="dynamic-step-desc">The colours of Pahari painting were not bought from a shop. They were prepared: lapis lazuli from Afghanistan, vermilion from purified cinnabar, white from conch shell, and gold beaten to impossible thinness.</p>
+                </div>
+
+                <div class="dynamic-text-item" data-step="2">
+                  <span class="dynamic-step-label">STEP 3</span>
+                  <h2 class="dynamic-step-title">The Brushes</h2>
+                  <p class="dynamic-step-desc">The brushes of Pahari painting were made from the fine tail hairs of squirrels. The finest brushes contained as few as three or four hairs, capable of drawing a line finer than human hair.</p>
+                </div>
+
+                <div class="dynamic-text-item" data-step="3">
+                  <span class="dynamic-step-label">STEP 4</span>
+                  <h2 class="dynamic-step-title">The Drawing</h2>
+                  <p class="dynamic-step-desc">The painting began with a preliminary sketch in charcoal or light red, refined through master transfers, then outlined in permanent ink before color began.</p>
+                </div>
+
+                <div class="dynamic-text-item" data-step="4">
+                  <span class="dynamic-step-label">STEP 5</span>
+                  <h2 class="dynamic-step-title">The Colouring</h2>
+                  <p class="dynamic-step-desc">Colour was applied in delicate layers: flat washes first, then meticulous tonal modelling, followed by micro-strokes defining fabric textures and botanical life.</p>
+                </div>
+
+                <div class="dynamic-text-item" data-step="5">
+                  <span class="dynamic-step-label">STEP 6</span>
+                  <h2 class="dynamic-step-title">Gold and Final Details</h2>
+                  <p class="dynamic-step-desc">Pure gold was applied with fine gum medium for jewellery, halo outlines, and architecture, then burnished with agate stone to achieve a mirror-bright metal gleam.</p>
+                </div>
+
+                <div class="dynamic-text-item" data-step="6">
+                  <span class="dynamic-step-label">STEP 7</span>
+                  <h2 class="dynamic-step-title">The Artists and Their Lives</h2>
+                  <p class="dynamic-step-desc">Painting in the Pahari courts was a sacred hereditary profession. Master families passed secrets across generations, dedicated entirely to the perfection of emotional vision.</p>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Right Cards Stack Column -->
+            <div class="process-cards-col">
+              <div class="cards-stage">
+                
+                <div class="stack-card" style="z-index: 10;">
+                  <img src="assets/process/art-1.png" alt="The Paper and the Ground" class="stack-card-img" />
+                  <div class="stack-card-overlay"></div>
+                </div>
+
+                <div class="stack-card" style="z-index: 9;">
+                  <img src="assets/process/art-2.png" alt="The Pigments" class="stack-card-img" />
+                  <div class="stack-card-overlay"></div>
+                </div>
+
+                <div class="stack-card" style="z-index: 8;">
+                  <img src="assets/process/art-3.png" alt="The Brushes" class="stack-card-img" />
+                  <div class="stack-card-overlay"></div>
+                </div>
+
+                <div class="stack-card" style="z-index: 7;">
+                  <img src="assets/process/art-4.png" alt="The Drawing" class="stack-card-img" />
+                  <div class="stack-card-overlay"></div>
+                </div>
+
+                <div class="stack-card" style="z-index: 6;">
+                  <img src="assets/process/art-5.png" alt="The Colouring" class="stack-card-img" />
+                  <div class="stack-card-overlay"></div>
+                </div>
+
+                <div class="stack-card" style="z-index: 5;">
+                  <img src="assets/process/art-6.png" alt="Gold and Final Details" class="stack-card-img" />
+                  <div class="stack-card-overlay"></div>
+                </div>
+
+                <div class="stack-card" style="z-index: 4;">
+                  <img src="assets/process/art-7.png" alt="The Artists and Their Lives" class="stack-card-img" />
+                  <div class="stack-card-overlay"></div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Morphing Curved SVG Curtain Overlay for Page Transitions -->
+  <div id="transition-curtain" class="transition-curtain">
+    <svg class="transition-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path id="transition-path" class="transition-path" d="M 0 0 Q 50 0 100 0 L 100 0 Q 50 0 0 0 Z"></path>
+    </svg>
+  </div>
+
+  <div class="cursor-hint">Drag or scroll to rotate &bull; Click to inspect</div>
+
+  <!-- Application Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/gallery.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/process.js"></script>
+  <script src="js/transitions.js"></script>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      // Initialize Three.js 3D Gallery
+      const gallery = new FloatingGallery();
+
+      // Initialize History View
+      const historyView = new HistoryView();
+
+      // Initialize Making Of / Process View
+      const processView = new ProcessView();
+
+      // Initialize Page Router & Curtain Transitions
+      const router = new PageRouter();
+    });
+  </script>
+</body>
+</html>
