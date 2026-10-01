@@ -49,7 +49,7 @@ class FloatingGallery {
     this.currentCamLookAt = new THREE.Vector3(0, 0, 0);
 
     this.initScene();
-    this.initLightsAndFog();
+    this.initLights();
     this.createCards();
     this.createPaperParticles();
     this.setupEvents();
@@ -80,21 +80,22 @@ class FloatingGallery {
     this.scene.add(this.galleryGroup);
   }
 
-  initLightsAndFog() {
-    // Warm atmospheric fog
-    this.scene.fog = new THREE.Fog(0xe8dcc5, 9, 35);
+  initLights() {
+    // Keep cards vibrant: no dense fog on card surfaces
+    // Subtle background fog only for distant particles
+    this.scene.fog = new THREE.Fog(0xe8dcc5, 25, 60);
 
     // Warm ambient light
-    const ambientLight = new THREE.AmbientLight(0xfff8ee, 1.2);
+    const ambientLight = new THREE.AmbientLight(0xfffdf7, 1.4);
     this.scene.add(ambientLight);
 
     // Directional light from front-top
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
     dirLight.position.set(5, 10, 7);
     this.scene.add(dirLight);
 
     // Subtle fill light
-    const fillLight = new THREE.DirectionalLight(0xe4d3b5, 0.5);
+    const fillLight = new THREE.DirectionalLight(0xe4d3b5, 0.6);
     fillLight.position.set(-5, -5, 5);
     this.scene.add(fillLight);
   }
@@ -133,24 +134,18 @@ class FloatingGallery {
 
     const cardGeometry = new THREE.PlaneGeometry(1.5, 2.0);
     const borderGeometry = new THREE.PlaneGeometry(1.54, 2.04);
-    const borderMaterial = new THREE.MeshBasicMaterial({
-      color: 0x313927,
-      transparent: true,
-      opacity: 0.12,
-      side: THREE.DoubleSide
-    });
 
     ARTS_DATA.forEach((item, index) => {
-      // Main positioning group for lerping
+      // Main positioning group for lerping to sphere/cylinder coordinates
       const mainGroup = new THREE.Group();
       const initialPos = this.spherePositions[index];
       mainGroup.position.copy(initialPos);
 
-      // Float group for idle wave motion and orientation
+      // Float group for orientation & billboarding
       const floatGroup = new THREE.Group();
       mainGroup.add(floatGroup);
 
-      // Card texture
+      // Card texture: high-resolution, vivid colors, fog disabled so cards stay crisp
       const texture = textureLoader.load(item.image);
       texture.generateMipmaps = true;
       texture.minFilter = THREE.LinearMipmapLinearFilter;
@@ -159,13 +154,22 @@ class FloatingGallery {
         map: texture,
         transparent: true,
         opacity: 1.0,
+        fog: false, // Prevents fog from washing out cards
+        side: THREE.DoubleSide
+      });
+
+      const borderMaterial = new THREE.MeshBasicMaterial({
+        color: 0x313927,
+        transparent: true,
+        opacity: 0.15,
+        fog: false,
         side: THREE.DoubleSide
       });
 
       const cardMesh = new THREE.Mesh(cardGeometry, cardMaterial);
       cardMesh.userData = { id: item.id, item, index, parentCard: mainGroup };
 
-      // Elegant dark border placard backing
+      // Placard border
       const borderMesh = new THREE.Mesh(borderGeometry, borderMaterial);
       borderMesh.position.z = -0.005;
       floatGroup.add(borderMesh);
@@ -183,7 +187,9 @@ class FloatingGallery {
         borderMesh,
         targetPos: initialPos.clone(),
         seed: Math.random() * 100,
-        scaleMultiplier: 1.0
+        scaleMultiplier: 1.0,
+        targetScale: 1.0,
+        targetOpacity: 1.0
       });
     });
   }
@@ -195,7 +201,7 @@ class FloatingGallery {
       textureLoader.load('assets/textures/paper-2.png')
     ];
 
-    const particleCount = 100;
+    const particleCount = 90;
     this.particlesGroup = new THREE.Group();
     this.scene.add(this.particlesGroup);
 
@@ -205,7 +211,7 @@ class FloatingGallery {
       const mat = new THREE.MeshBasicMaterial({
         map: textures[Math.random() > 0.5 ? 0 : 1],
         transparent: true,
-        opacity: 0.65 + Math.random() * 0.35,
+        opacity: 0.55 + Math.random() * 0.35,
         side: THREE.DoubleSide
       });
       const pMesh = new THREE.Mesh(geom, mat);
@@ -217,7 +223,7 @@ class FloatingGallery {
         z: (Math.random() - 0.5) * 26,
         rotationZ: Math.random() * Math.PI * 2,
         rotationX: Math.random() * Math.PI * 2,
-        speed: 0.006 + Math.random() * 0.016,
+        speed: 0.005 + Math.random() * 0.014,
         drift: 0.002 + Math.random() * 0.004
       };
 
@@ -262,7 +268,7 @@ class FloatingGallery {
       this.isDragging = false;
     });
 
-    // Mouse Wheel (Rotates gallery)
+    // Mouse Wheel (Rotates gallery around Y axis)
     window.addEventListener('wheel', (e) => {
       if (this.isDetailOpen) return;
       this.rotationVelocity += e.deltaY * 0.0006;
@@ -381,15 +387,6 @@ class FloatingGallery {
         gsap.fromTo('.detail-desc-col', { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', delay: 0.2 });
       }
     }
-
-    // Dim non-selected cards
-    this.cards.forEach((c, i) => {
-      const isTarget = (i === index);
-      if (window.gsap) {
-        gsap.to(c.mesh.material, { opacity: isTarget ? 1.0 : 0.08, duration: 0.5 });
-        gsap.to(c.borderMesh.material, { opacity: isTarget ? 0.2 : 0.02, duration: 0.5 });
-      }
-    });
   }
 
   closeCardDetail() {
@@ -413,15 +410,6 @@ class FloatingGallery {
     // Restore center hero logo and bottom controls
     if (this.centerHero) this.centerHero.classList.remove('hidden-hero');
     if (this.bottomControls) this.bottomControls.classList.remove('hidden-controls');
-
-    // Restore all cards opacity and scale
-    this.cards.forEach((c) => {
-      c.scaleMultiplier = 1.0;
-      if (window.gsap) {
-        gsap.to(c.mesh.material, { opacity: 1.0, duration: 0.5 });
-        gsap.to(c.borderMesh.material, { opacity: 0.12, duration: 0.5 });
-      }
-    });
 
     this.selectedCard = null;
     this.selectedIndex = null;
@@ -476,9 +464,7 @@ class FloatingGallery {
 
       // Rotate group so selected card faces front
       const targetAngleY = -Math.atan2(cardLocalPos.x, cardLocalPos.z);
-      this.galleryGroup.rotation.y = THREE.MathUtils.lerp(this.galleryGroup.rotation.y, targetAngleY, 0.05);
-
-      this.selectedCard.scaleMultiplier = THREE.MathUtils.lerp(this.selectedCard.scaleMultiplier, 1.35, 0.08);
+      this.galleryGroup.rotation.y = THREE.MathUtils.lerp(this.galleryGroup.rotation.y, targetAngleY, 0.08);
     } else {
       // Normal Parallax Camera tilt with mouse
       const targetCamX = 0.75 * this.mouseNormalized.x;
@@ -493,28 +479,66 @@ class FloatingGallery {
     this.currentCamLookAt.lerp(this.targetCamLookAt, 0.05);
     this.camera.lookAt(this.currentCamLookAt);
 
-    // Compute local camera position for child lookAt orientation
-    const localCamPos = this.galleryGroup.worldToLocal(this.camera.position.clone());
+    // Compute inverse quaternion of galleryGroup to align card orientations
+    const groupWorldQuat = new THREE.Quaternion();
+    this.galleryGroup.getWorldQuaternion(groupWorldQuat);
+    const invGroupQuat = groupWorldQuat.clone().invert();
 
-    // Cards floating wave & orientation
+    // Cards floating wave, billboarding, opacity & orientation
     this.cards.forEach((card, i) => {
       // Lerp position to current view geometry (sphere / cylinder)
       card.mainGroup.position.lerp(card.targetPos, 0.08);
 
-      // Idle floating bobbing motion
-      const seed = card.seed;
-      card.floatGroup.position.y = Math.sin(elapsedTime * 1.5 + seed) * 0.1;
-      card.floatGroup.rotation.x = Math.cos(elapsedTime * 0.75 + seed) * 0.035;
-      card.floatGroup.rotation.z = Math.sin(elapsedTime * 0.65 + seed) * 0.025;
+      // Determine target opacity & scale based on hover / detail state
+      if (this.isDetailOpen) {
+        // In detail view: selected card is full opacity, other cards fade to pale translucent
+        card.targetOpacity = (this.selectedIndex === i) ? 1.0 : 0.08;
+        card.targetScale = (this.selectedIndex === i) ? 1.35 : 0.95;
+      } else if (this.hoveredCard !== null) {
+        // Requirement 5: Hovered image stays full actual color and opacity;
+        // Non-hovered images become translucent and pale!
+        card.targetOpacity = (this.hoveredCard === i) ? 1.0 : 0.22;
+        card.targetScale = (this.hoveredCard === i) ? 1.15 : 1.0;
+      } else {
+        // Requirement 5: When NO cursor hover, all images stay fully opaque and vivid!
+        card.targetOpacity = 1.0;
+        card.targetScale = 1.0;
+      }
 
-      // Card faces the camera in local space!
-      card.floatGroup.lookAt(localCamPos);
+      // Orientation & Billboarding (Requirements 3 & 4)
+      if (this.isDetailOpen && this.selectedIndex === i) {
+        // Requirement 4: On click, card is 100% upright, flat, squarely facing the viewer (NO skew!)
+        card.floatGroup.position.set(0, 0, 0);
+        // Direct alignment with camera orientation:
+        card.floatGroup.quaternion.copy(invGroupQuat.clone().multiply(this.camera.quaternion));
+      } else {
+        // Requirement 3: Stop spinning in their own axis!
+        // Start from camera world orientation so cards directly point towards the user
+        const targetWorldQuat = this.camera.quaternion.clone();
 
-      // Hover scale
-      const isHovered = (this.hoveredCard === i && !this.isDetailOpen);
-      const targetScale = isHovered ? 1.15 : (this.isDetailOpen && this.selectedIndex === i ? 1.35 : 1.0);
-      card.scaleMultiplier = THREE.MathUtils.lerp(card.scaleMultiplier, targetScale, 0.08);
+        // Natural subtle tilt (like reference website) and gentle breathing sway
+        const seed = card.seed;
+        const floatBob = Math.sin(elapsedTime * 1.4 + seed) * 0.08;
+        card.floatGroup.position.y = floatBob;
+
+        const tiltX = -0.06; // slight gentle tilt back
+        const swayZ = Math.sin(elapsedTime * 0.9 + seed) * 0.02;
+        const swayX = Math.cos(elapsedTime * 0.75 + seed) * 0.015;
+
+        const tiltEuler = new THREE.Euler(tiltX + swayX, 0, swayZ, 'YXZ');
+        const tiltQuat = new THREE.Quaternion().setFromEuler(tiltEuler);
+        targetWorldQuat.multiply(tiltQuat);
+
+        // Convert world orientation into galleryGroup local space
+        card.floatGroup.quaternion.copy(invGroupQuat.clone().multiply(targetWorldQuat));
+      }
+
+      // Smoothly lerp scale & opacity
+      card.scaleMultiplier = THREE.MathUtils.lerp(card.scaleMultiplier, card.targetScale, 0.08);
       card.mainGroup.scale.set(card.scaleMultiplier, card.scaleMultiplier, card.scaleMultiplier);
+
+      card.mesh.material.opacity = THREE.MathUtils.lerp(card.mesh.material.opacity, card.targetOpacity, 0.12);
+      card.borderMesh.material.opacity = THREE.MathUtils.lerp(card.borderMesh.material.opacity, card.targetOpacity * 0.15, 0.12);
     });
 
     // Paper particles falling animation

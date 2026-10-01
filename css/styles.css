@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Kalnia:wght@100..700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Federo&family=Noto+Sans+Oriya:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&display=swap');
 
 :root {
   --primary: #313927;
@@ -9,8 +9,9 @@
   --accent-cream: #E4D3B5;
   --accent-red: #dd1d25;
   --bg-parchment: #e8dcc5;
-  --font-heading: 'Kalnia', 'Playfair Display', Georgia, serif;
+  --font-heading: 'Federo', Georgia, serif;
   --font-para: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-odia: 'Noto Sans Oriya', 'Plus Jakarta Sans', sans-serif;
 }
 
 * {
@@ -241,31 +242,47 @@ nav.main-nav {
 }
 
 .restaurant-logo {
-  max-width: 230px;
-  width: 48vw;
+  max-width: 360px;
+  width: 72vw;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 6px 20px rgba(49, 57, 39, 0.12));
+  filter: drop-shadow(0 8px 30px rgba(49, 57, 39, 0.16));
   user-select: none;
   pointer-events: none;
+  transition: transform 0.4s ease;
 }
 
 @media (min-width: 768px) {
   .restaurant-logo {
-    max-width: 320px;
-    width: 25vw;
+    max-width: 520px;
+    width: 40vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  .restaurant-logo {
+    max-width: 600px;
+    width: 36vw;
   }
 }
 
 .hero-subtitle {
-  margin-top: 0.45rem;
-  font-family: var(--font-para);
-  font-size: 0.85rem;
-  font-weight: 300;
-  letter-spacing: 0.22em;
+  margin-top: 0.75rem;
+  font-family: var(--font-odia);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   color: var(--primary);
-  text-transform: uppercase;
-  opacity: 0.85;
+  opacity: 0.95;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+@media (min-width: 768px) {
+  .hero-subtitle {
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
+    margin-top: 1rem;
+  }
 }
 
 /* Bottom View Switcher Pill */

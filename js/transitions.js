@@ -1,6 +1,6 @@
 /**
  * Page Transitions & Router for ODIANEE
- * GSAP SVG curved curtain morphing transition identical to pahari.vercel.app
+ * Smooth curved SVG curtain transition between separate page URLs
  */
 
 class PageRouter {
@@ -8,14 +8,6 @@ class PageRouter {
     this.curtain = document.getElementById('transition-curtain');
     this.path = document.getElementById('transition-path');
     this.navLinks = document.querySelectorAll('.nav-link');
-    this.views = {
-      collection: document.getElementById('view-collection'),
-      history: document.getElementById('view-history'),
-      process: document.getElementById('view-process')
-    };
-
-    this.currentViewId = 'collection';
-    this.isTransitioning = false;
 
     // SVG morph paths
     this.paths = {
@@ -26,114 +18,62 @@ class PageRouter {
       uncoverFlat: 'M 0 100 Q 50 100 100 100 L 100 100 Q 50 100 0 100 Z'
     };
 
-    this.setupNavigation();
-    this.handleInitialRoute();
+    this.initPageEnterAnimation();
+    this.setupPageLinks();
   }
 
-  setupNavigation() {
+  initPageEnterAnimation() {
+    // If arriving from a transition or initial load, reveal page with upward curtain wipe
+    if (this.curtain && this.path && window.gsap) {
+      this.curtain.style.pointerEvents = 'all';
+      gsap.timeline({
+        onComplete: () => {
+          this.curtain.style.pointerEvents = 'none';
+        }
+      })
+      .set(this.path, { attr: { d: this.paths.coverFlat } })
+      .to(this.path, { attr: { d: this.paths.uncoverCurve }, duration: 0.45, ease: 'power2.in' })
+      .to(this.path, { attr: { d: this.paths.uncoverFlat }, duration: 0.35, ease: 'power2.out' });
+    }
+  }
+
+  setupPageLinks() {
     this.navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetView = link.getAttribute('data-view');
-        if (targetView && targetView !== this.currentViewId) {
-          this.navigateTo(targetView);
+        const href = link.getAttribute('href');
+        if (!href) return;
+
+        // If link points to current page, do nothing
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        const targetPage = href.split('#')[0].split('/').pop() || 'index.html';
+
+        if (currentPage === targetPage && !href.includes('#')) {
+          e.preventDefault();
+          return;
+        }
+
+        // If internal HTML page navigation, do curtain wipe transition
+        if (href.endsWith('.html') || href === '/' || href === 'index.html') {
+          e.preventDefault();
+          this.navigateToUrl(href);
         }
       });
     });
-
-    window.addEventListener('popstate', (e) => {
-      const stateView = e.state ? e.state.view : this.getViewFromHash();
-      if (stateView && stateView !== this.currentViewId) {
-        this.navigateTo(stateView, false);
-      }
-    });
   }
 
-  getViewFromHash() {
-    const hash = window.location.hash.replace('#', '').toLowerCase();
-    if (hash === 'history') return 'history';
-    if (hash === 'process' || hash === 'making-of') return 'process';
-    return 'collection';
-  }
-
-  handleInitialRoute() {
-    const initialView = this.getViewFromHash();
-    this.switchViewDOM(initialView);
-    this.currentViewId = initialView;
-    this.updateNavState(initialView);
-  }
-
-  navigateTo(targetViewId, updateHistory = true) {
-    if (this.isTransitioning || targetViewId === this.currentViewId) return;
-    this.isTransitioning = true;
-
-    if (updateHistory) {
-      const hash = targetViewId === 'collection' ? '' : `#${targetViewId}`;
-      window.history.pushState({ view: targetViewId }, '', window.location.pathname + hash);
-    }
-
-    this.updateNavState(targetViewId);
-
-    if (window.gsap && this.path) {
-      // 1. Wipe Down Transition
+  navigateToUrl(url) {
+    if (this.curtain && this.path && window.gsap) {
       this.curtain.style.pointerEvents = 'all';
-
-      const tl = gsap.timeline({
+      gsap.timeline({
         onComplete: () => {
-          // Switch active view DOM while curtain is closed
-          this.switchViewDOM(targetViewId);
-          this.currentViewId = targetViewId;
-
-          // 2. Wipe Up Transition
-          gsap.timeline({
-            onComplete: () => {
-              this.curtain.style.pointerEvents = 'none';
-              this.isTransitioning = false;
-            }
-          })
-          .set(this.path, { attr: { d: this.paths.coverFlat } })
-          .to(this.path, { attr: { d: this.paths.uncoverCurve }, duration: 0.5, ease: 'power2.in' })
-          .to(this.path, { attr: { d: this.paths.uncoverFlat }, duration: 0.35, ease: 'power2.out' });
+          window.location.href = url;
         }
-      });
-
-      tl.set(this.path, { attr: { d: this.paths.start } })
-        .to(this.path, { attr: { d: this.paths.coverCurve }, duration: 0.5, ease: 'power2.in' })
-        .to(this.path, { attr: { d: this.paths.coverFlat }, duration: 0.3, ease: 'power2.out' });
-
+      })
+      .set(this.path, { attr: { d: this.paths.start } })
+      .to(this.path, { attr: { d: this.paths.coverCurve }, duration: 0.45, ease: 'power2.in' })
+      .to(this.path, { attr: { d: this.paths.coverFlat }, duration: 0.28, ease: 'power2.out' });
     } else {
-      // Fallback instant switch
-      this.switchViewDOM(targetViewId);
-      this.currentViewId = targetViewId;
-      this.isTransitioning = false;
+      window.location.href = url;
     }
-  }
-
-  switchViewDOM(targetViewId) {
-    Object.keys(this.views).forEach(key => {
-      const v = this.views[key];
-      if (!v) return;
-      if (key === targetViewId) {
-        v.classList.add('active');
-        v.scrollTop = 0;
-        v.scrollLeft = 0;
-      } else {
-        v.classList.remove('active');
-      }
-    });
-
-    // Notify window for layout refreshes (like Three.js resize)
-    window.dispatchEvent(new Event('resize'));
-  }
-
-  updateNavState(activeViewId) {
-    this.navLinks.forEach(link => {
-      const view = link.getAttribute('data-view');
-      if (view === activeViewId) {
-        link.classList.add('active');
-      } else {
-        link.classList.remove('active');
-      }
-    });
   }
 }
