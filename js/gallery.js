@@ -9,6 +9,7 @@ class FloatingGallery {
     this.container = document.getElementById('canvas-container');
     this.canvas = document.getElementById('webgl-canvas');
     this.centerHero = document.querySelector('.center-hero');
+    this.wheelBackdrop = document.getElementById('hero-wheel-backdrop');
     this.bottomControls = document.querySelector('.bottom-controls');
     this.detailModal = document.getElementById('detail-modal');
     
@@ -397,6 +398,7 @@ class FloatingGallery {
 
     // Hide center hero logo and bottom controls smoothly
     if (this.centerHero) this.centerHero.classList.add('hidden-hero');
+    if (this.wheelBackdrop) this.wheelBackdrop.classList.add('hidden-hero');
     if (this.bottomControls) this.bottomControls.classList.add('hidden-controls');
 
     // Populate detail modal text
@@ -447,6 +449,7 @@ class FloatingGallery {
 
     // Restore center hero logo and bottom controls
     if (this.centerHero) this.centerHero.classList.remove('hidden-hero');
+    if (this.wheelBackdrop) this.wheelBackdrop.classList.remove('hidden-hero');
     if (this.bottomControls) this.bottomControls.classList.remove('hidden-controls');
 
     this.selectedCard = null;

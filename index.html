@@ -43,18 +43,20 @@
          VIEW 1: COLLECTION (3D Interactive Canvas)
          ======================================================== -->
     <main id="view-collection" class="view-layer active">
+      <!-- Ambient Rotating Konark Wheel (Behind 3D Canvas, Above Background) -->
+      <div class="hero-wheel-backdrop" id="hero-wheel-backdrop">
+        <img src="assets/chakra-wheel.png" alt="Sacred Konark Wheel" class="center-chakra-wheel" />
+      </div>
+
       <!-- 3D WebGL Canvas Container -->
       <div id="canvas-container">
         <canvas id="webgl-canvas"></canvas>
       </div>
 
       <!-- Center Restaurant Logo Hero Section -->
-      <section class="center-hero">
+      <section class="center-hero" id="center-hero">
         <div class="logo-wrap">
-          <div class="chakra-wrapper">
-            <img src="assets/chakra-wheel.png" alt="Sacred Konark Wheel" class="center-chakra-wheel" />
-            <img src="assets/logo.png" alt="ODIANEE Restaurant Logo" class="restaurant-logo" id="main-restaurant-logo" />
-          </div>
+          <img src="assets/logo.png" alt="ODIANEE Restaurant Logo" class="restaurant-logo" id="main-restaurant-logo" />
           <p class="hero-subtitle">ଏକ ମାତ୍ର ପ୍ରୟାସ</p>
         </div>
       </section>

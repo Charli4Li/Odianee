@@ -221,7 +221,70 @@ nav.main-nav {
   height: 100%;
 }
 
-/* Center Logo Section */
+/* ========================================================
+   AMBIENT ROTATING KONARK WHEEL (Behind Canvas, Above Background)
+   ======================================================== */
+.hero-wheel-backdrop {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2; /* Stays above background (-10), behind 3D canvas (5) */
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: subtleFloat 6s ease-in-out infinite;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.hero-wheel-backdrop.hidden-hero {
+  opacity: 0;
+  transform: translate(-50%, -55%) scale(0.92);
+  pointer-events: none;
+}
+
+.center-chakra-wheel {
+  width: min(540px, 94vw);
+  height: min(540px, 94vw);
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  animation: slowChakraSpin 70s linear infinite;
+  transform-origin: center center;
+  opacity: 0.88;
+  filter: drop-shadow(0 2px 16px rgba(49, 57, 39, 0.12));
+  will-change: transform;
+}
+
+@media (min-width: 768px) {
+  .center-chakra-wheel {
+    width: min(780px, 78vh);
+    height: min(780px, 78vh);
+  }
+}
+
+@media (min-width: 1200px) {
+  .center-chakra-wheel {
+    width: min(920px, 86vh);
+    height: min(920px, 86vh);
+  }
+}
+
+@keyframes slowChakraSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================================
+   CENTER LOGO SECTION (Centered exactly concentric with wheel)
+   ======================================================== */
 .center-hero {
   position: absolute;
   top: 50%;
@@ -231,8 +294,8 @@ nav.main-nav {
   text-align: center;
   pointer-events: none;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
   transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
@@ -246,8 +309,8 @@ nav.main-nav {
 .logo-wrap {
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
   animation: subtleFloat 6s ease-in-out infinite;
 }
 
@@ -256,39 +319,10 @@ nav.main-nav {
   50% { transform: translateY(-6px); }
 }
 
-/* Center Rotating Wheel & Logo Container */
-.chakra-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.center-chakra-wheel {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 1;
-  width: 480px;
-  height: 480px;
-  max-width: 90vw;
-  max-height: 90vw;
-  aspect-ratio: 1 / 1;
-  object-fit: contain;
-  pointer-events: none;
-  user-select: none;
-  animation: slowChakraSpin 65s linear infinite;
-  transform-origin: center center;
-  opacity: 0.85;
-  filter: drop-shadow(0 2px 14px rgba(49, 57, 39, 0.12));
-  will-change: transform;
-}
-
 .restaurant-logo {
-  position: relative;
-  z-index: 2;
-  max-width: 440px;
-  width: 82vw;
+  display: block;
+  max-width: 380px;
+  width: 78vw;
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 10px 32px rgba(49, 57, 39, 0.18));
@@ -299,39 +333,24 @@ nav.main-nav {
 
 @media (min-width: 768px) {
   .restaurant-logo {
-    max-width: 640px;
-    width: 46vw;
-  }
-  .center-chakra-wheel {
-    width: 640px;
-    height: 640px;
+    max-width: 560px;
+    width: 48vw;
   }
 }
 
 @media (min-width: 1200px) {
   .restaurant-logo {
-    max-width: 760px;
+    max-width: 680px;
     width: 42vw;
-  }
-  .center-chakra-wheel {
-    width: 760px;
-    height: 760px;
-  }
-}
-
-@keyframes slowChakraSpin {
-  from {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
 .hero-subtitle {
-  position: relative;
-  z-index: 2;
-  margin-top: 1rem;
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
   font-family: var(--font-odia);
   font-size: 1.45rem;
   font-weight: 800;
@@ -340,13 +359,14 @@ nav.main-nav {
   opacity: 0.98;
   text-shadow: 0 1px 3px rgba(255, 255, 255, 0.6);
   -webkit-text-stroke: 0.35px var(--primary);
+  pointer-events: none;
 }
 
 @media (min-width: 768px) {
   .hero-subtitle {
-    font-size: 1.95rem;
-    letter-spacing: 0.22em;
-    margin-top: 1.25rem;
+    font-size: 1.85rem;
+    letter-spacing: 0.2em;
+    top: calc(100% + 0.85rem);
   }
 }
 
