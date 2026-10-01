@@ -43,8 +43,6 @@
          VIEW 1: COLLECTION (3D Interactive Canvas)
          ======================================================== -->
     <main id="view-collection" class="view-layer active">
-      <div class="canvas-bg"></div>
-      
       <!-- 3D WebGL Canvas Container -->
       <div id="canvas-container">
         <canvas id="webgl-canvas"></canvas>
@@ -53,7 +51,10 @@
       <!-- Center Restaurant Logo Hero Section -->
       <section class="center-hero">
         <div class="logo-wrap">
-          <img src="assets/logo.png" alt="ODIANEE Restaurant Logo" class="restaurant-logo" id="main-restaurant-logo" />
+          <div class="chakra-wrapper">
+            <img src="assets/chakra-wheel.png" alt="Sacred Konark Wheel" class="center-chakra-wheel" />
+            <img src="assets/logo.png" alt="ODIANEE Restaurant Logo" class="restaurant-logo" id="main-restaurant-logo" />
+          </div>
           <p class="hero-subtitle">ଏକ ମାତ୍ର ପ୍ରୟାସ</p>
         </div>
       </section>
@@ -89,7 +90,6 @@
          VIEW 2: HISTORY (Horizontal Scroll Gallery)
          ======================================================== -->
     <section id="view-history" class="view-layer">
-      <img src="assets/background.png" class="history-bg" alt="History Texture Background" />
       <div id="history-progress" class="history-progress"></div>
 
       <!-- Section 01 -->
@@ -187,7 +187,6 @@
          VIEW 3: MAKING OF / PROCESS (Interactive Card Stack)
          ======================================================== -->
     <section id="view-process" class="view-layer">
-      <img src="assets/background4.png" class="process-bg" alt="Process Background" />
       <div class="process-container">
         <div class="process-pin-wrapper">
           <div class="process-main">
