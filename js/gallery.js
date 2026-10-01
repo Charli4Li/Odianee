@@ -1,6 +1,7 @@
 /**
  * 3D Floating Gallery for ODIANEE
- * Flawless front-facing billboarding, zero-spin axis, hover translucency, and detail inspection
+ * Flawless front-facing billboarding, rich saturated colors (no paleness),
+ * hover translucency, and detail inspection
  */
 
 class FloatingGallery {
@@ -76,34 +77,31 @@ class FloatingGallery {
     });
     this.renderer.setSize(width, height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    this.renderer.outputEncoding = THREE.sRGBEncoding;
 
-    // Group for holding the cards
+
+
+    // Set outputEncoding to LinearEncoding so Three.js never gamma-bleaches or washes out textures
+    this.renderer.outputEncoding = THREE.LinearEncoding;
+
+    // Container holding cards
     this.cardsContainer = new THREE.Group();
     this.scene.add(this.cardsContainer);
   }
 
   initLights() {
-    // Warm ambient light so colors are vivid and natural
-    const ambientLight = new THREE.AmbientLight(0xfffdf7, 1.4);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
     this.scene.add(ambientLight);
 
-    // Directional light from front-top
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
     dirLight.position.set(5, 10, 7);
     this.scene.add(dirLight);
-
-    // Subtle fill light
-    const fillLight = new THREE.DirectionalLight(0xe4d3b5, 0.6);
-    fillLight.position.set(-5, -5, 5);
-    this.scene.add(fillLight);
   }
 
   computeSpherePositions(count, radius = 5.0) {
     const positions = [];
     const phi = Math.PI * (3 - Math.sqrt(5)); // Golden angle (~2.39996 rad)
     for (let i = 0; i < count; i++) {
-      const y = 1 - (i / (count - 1)) * 2; // from 1 down to -1
+      const y = 1 - (i / (count - 1)) * 2;
       const radiusAtY = Math.sqrt(1 - y * y);
       const theta = phi * i;
       const x = Math.cos(theta) * radiusAtY;
@@ -137,37 +135,80 @@ class FloatingGallery {
     ARTS_DATA.forEach((item, index) => {
       const initialPos = this.spherePositions[index];
 
-      // Card texture: crisp, saturated, no fog washout
+      // Load texture with LinearEncoding to guarantee true source pixel fidelity
       const texture = textureLoader.load(item.image);
+      texture.encoding = THREE.LinearEncoding;
       texture.generateMipmaps = true;
       texture.minFilter = THREE.LinearMipmapLinearFilter;
 
-      const cardMaterial = new THREE.MeshBasicMaterial({
-        map: texture,
+      // Custom high-fidelity ShaderMaterial:
+      // - Direct Rec.709 color fidelity
+      // - Rich contrast (+18%) and deep vibrant saturation (+28%)
+      // - Eliminates Three.js gamma bleaching and double-sRGB washing out
+      // - Clean opacity blending for hover translucency
+      const cardMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+          map: { value: texture },
+          opacity: { value: 1.0 },
+          contrast: { value: 1.18 },
+          saturation: { value: 1.28 },
+          brightness: { value: 0.98 }
+        },
+        vertexShader: `
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform sampler2D map;
+          uniform float opacity;
+          uniform float contrast;
+          uniform float saturation;
+          uniform float brightness;
+          varying vec2 vUv;
+
+          void main() {
+            vec4 tex = texture2D(map, vUv);
+            vec3 col = tex.rgb;
+
+            // Rec.709 Luma for accurate saturation enhancement
+            float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
+            col = mix(vec3(luma), col, saturation);
+
+            // High contrast curve: deepens shadows and blacks, makes rich tones punchy
+            col = (col - 0.5) * contrast + 0.5;
+
+            // Controlled brightness
+            col *= brightness;
+
+            col = clamp(col, 0.0, 1.0);
+
+            gl_FragColor = vec4(col, tex.a * opacity);
+          }
+        `,
         transparent: true,
-        opacity: 1.0,
-        fog: false,
-        side: THREE.DoubleSide
+        depthWrite: true,
+        side: THREE.FrontSide
       });
 
+      // Placard dark outline border
       const borderMaterial = new THREE.MeshBasicMaterial({
-        color: 0x313927,
+        color: 0x222a1b,
         transparent: true,
-        opacity: 0.15,
-        fog: false,
-        side: THREE.DoubleSide
+        opacity: 0.45,
+        side: THREE.FrontSide
       });
+      const borderMesh = new THREE.Mesh(borderGeometry, borderMaterial);
+      borderMesh.position.set(0, 0, -0.005);
 
-      // Main Card Mesh placed directly in cardsContainer
+      // Main Card Mesh
       const cardMesh = new THREE.Mesh(cardGeometry, cardMaterial);
       cardMesh.position.copy(initialPos);
       cardMesh.userData = { id: item.id, item, index };
 
-      // Placard border child
-      const borderMesh = new THREE.Mesh(borderGeometry, borderMaterial);
-      borderMesh.position.set(0, 0, -0.005);
       cardMesh.add(borderMesh);
-
       this.cardsContainer.add(cardMesh);
 
       this.cards.push({
@@ -190,8 +231,9 @@ class FloatingGallery {
       textureLoader.load('assets/textures/paper-1.png'),
       textureLoader.load('assets/textures/paper-2.png')
     ];
+    textures.forEach(t => { t.encoding = THREE.LinearEncoding; });
 
-    const particleCount = 80;
+    const particleCount = 70;
     this.particlesGroup = new THREE.Group();
     this.scene.add(this.particlesGroup);
 
@@ -244,6 +286,12 @@ class FloatingGallery {
       }
     });
 
+    // Reset hover when mouse leaves canvas container
+    this.container.addEventListener('mouseleave', () => {
+      this.hoveredCard = null;
+      this.mouse.set(-999, -999);
+    });
+
     // Pointer Down (Drag start)
     this.container.addEventListener('pointerdown', (e) => {
       if (e.target.closest('.bottom-controls') || e.target.closest('.detail-modal')) return;
@@ -258,7 +306,7 @@ class FloatingGallery {
       this.isDragging = false;
     });
 
-    // Mouse Wheel (Rotates gallery orbit around Y axis)
+    // Mouse Wheel (Rotates gallery orbit smoothly around Y axis)
     window.addEventListener('wheel', (e) => {
       if (this.isDetailOpen) return;
       this.rotationVelocity += e.deltaY * 0.0007;
@@ -493,17 +541,16 @@ class FloatingGallery {
       // This physically prevents any roll or spinning on their own axis!
       card.mesh.quaternion.copy(this.camera.quaternion);
 
-      // Opacity & Scale logic (Requirement 5)
+      // Opacity & Scale logic:
+      // In default state: 100% full, rich, vibrant, saturated colors!
+      // Only when hovered: the hovered card stays 100% opaque, others fade to pale translucent!
       if (this.isDetailOpen) {
         card.targetOpacity = (this.selectedIndex === i) ? 1.0 : 0.08;
         card.targetScale = (this.selectedIndex === i) ? 1.4 : 0.95;
       } else if (this.hoveredCard !== null) {
-        // When hovered on one image: THAT image stays full color & opacity;
-        // All non-hovered images become translucent and pale!
-        card.targetOpacity = (this.hoveredCard === i) ? 1.0 : 0.25;
+        card.targetOpacity = (this.hoveredCard === i) ? 1.0 : 0.35;
         card.targetScale = (this.hoveredCard === i) ? 1.16 : 1.0;
       } else {
-        // No hover: All images stay full vibrant color and 100% opaque!
         card.targetOpacity = 1.0;
         card.targetScale = 1.0;
       }
@@ -512,8 +559,18 @@ class FloatingGallery {
       const currentScale = THREE.MathUtils.lerp(card.mesh.scale.x, card.targetScale, 0.08);
       card.mesh.scale.set(currentScale, currentScale, currentScale);
 
-      card.mesh.material.opacity = THREE.MathUtils.lerp(card.mesh.material.opacity, card.targetOpacity, 0.12);
-      card.borderMesh.material.opacity = THREE.MathUtils.lerp(card.borderMesh.material.opacity, card.targetOpacity * 0.15, 0.12);
+      const currentOpacity = THREE.MathUtils.lerp(
+        card.mesh.material.uniforms.opacity.value,
+        card.targetOpacity,
+        0.12
+      );
+      card.mesh.material.uniforms.opacity.value = currentOpacity;
+      if (card.borderMesh) {
+        card.borderMesh.material.opacity = currentOpacity * 0.45;
+      }
+
+      // Keep depthWrite enabled when opaque to ensure sharp card occlusion
+      card.mesh.material.depthWrite = (card.targetOpacity >= 0.95 && currentOpacity >= 0.9);
     });
 
     // Paper particles falling animation
