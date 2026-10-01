@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Federo&family=Noto+Sans+Oriya:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Federo&family=Noto+Sans+Oriya:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
   --primary: #313927;
@@ -104,10 +104,11 @@ nav.main-nav {
 
 .nav-link {
   font-family: var(--font-para);
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   letter-spacing: 0.18em;
   text-decoration: none;
   color: var(--primary-dim);
+  font-weight: 600;
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
@@ -120,7 +121,7 @@ nav.main-nav {
 
 .nav-link.active {
   color: var(--primary);
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .nav-link.active::after {
@@ -242,11 +243,11 @@ nav.main-nav {
 }
 
 .restaurant-logo {
-  max-width: 360px;
-  width: 72vw;
+  max-width: 440px;
+  width: 82vw;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 8px 30px rgba(49, 57, 39, 0.16));
+  filter: drop-shadow(0 10px 32px rgba(49, 57, 39, 0.18));
   user-select: none;
   pointer-events: none;
   transition: transform 0.4s ease;
@@ -254,34 +255,35 @@ nav.main-nav {
 
 @media (min-width: 768px) {
   .restaurant-logo {
-    max-width: 520px;
-    width: 40vw;
+    max-width: 640px;
+    width: 46vw;
   }
 }
 
 @media (min-width: 1200px) {
   .restaurant-logo {
-    max-width: 600px;
-    width: 36vw;
+    max-width: 760px;
+    width: 42vw;
   }
 }
 
 .hero-subtitle {
-  margin-top: 0.75rem;
+  margin-top: 1rem;
   font-family: var(--font-odia);
-  font-size: 1.25rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
   color: var(--primary);
-  opacity: 0.95;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4);
+  opacity: 0.98;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.6);
+  -webkit-text-stroke: 0.35px var(--primary);
 }
 
 @media (min-width: 768px) {
   .hero-subtitle {
-    font-size: 1.6rem;
-    letter-spacing: 0.2em;
-    margin-top: 1rem;
+    font-size: 1.95rem;
+    letter-spacing: 0.22em;
+    margin-top: 1.25rem;
   }
 }
 
@@ -477,17 +479,17 @@ nav.main-nav {
 
 .detail-title {
   font-family: var(--font-heading);
-  font-size: 2.2rem;
-  font-weight: 200;
-  line-height: 1.1;
-  margin-bottom: 0.6rem;
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
   color: var(--primary);
-  text-shadow: 0 1px 2px rgba(232, 220, 197, 0.8);
+  letter-spacing: -0.01em;
 }
 
 @media (min-width: 768px) {
   .detail-title {
-    font-size: 3.4rem;
+    font-size: 3.6rem;
   }
 }
 
@@ -500,39 +502,40 @@ nav.main-nav {
 
 .detail-tag {
   font-family: var(--font-para);
-  font-size: 0.7rem;
-  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
   border-radius: 9999px;
-  background: rgba(49, 57, 39, 0.08);
+  background: rgba(49, 57, 39, 0.1);
   color: var(--primary);
   letter-spacing: 0.05em;
 }
 
 .detail-desc-col {
   width: 100%;
-  max-width: 480px;
+  max-width: 500px;
 }
 
 .detail-desc {
   font-family: var(--font-para);
-  font-size: 0.85rem;
-  font-weight: 300;
-  line-height: 1.6;
-  color: var(--primary);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.65;
+  color: #22281b;
   text-align: justify;
   text-wrap: balance;
-  background: rgba(232, 220, 197, 0.45);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  padding: 1rem 1.25rem;
+  background: rgba(232, 220, 197, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 1.1rem 1.4rem;
   border-radius: 12px;
-  border: 1px solid rgba(49, 57, 39, 0.1);
+  border: 1px solid rgba(49, 57, 39, 0.15);
 }
 
 @media (min-width: 768px) {
   .detail-desc {
-    font-size: 0.92rem;
-    padding: 1.2rem 1.5rem;
+    font-size: 1.02rem;
+    padding: 1.3rem 1.65rem;
   }
 }
 
@@ -612,11 +615,11 @@ nav.main-nav {
 
 .section-num {
   color: var(--primary);
-  font-family: var(--font-para);
-  font-size: 2.2rem;
-  font-weight: 300;
+  font-family: var(--font-heading);
+  font-size: 2.4rem;
+  font-weight: 600;
   margin-bottom: 0.5rem;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .section-title-wrap {
@@ -626,16 +629,16 @@ nav.main-nav {
 .section-title {
   color: var(--primary);
   font-family: var(--font-heading);
-  font-size: 1.8rem;
-  font-weight: 300;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   margin-bottom: 1.25rem;
 }
 
 @media (min-width: 768px) {
   .section-title {
-    font-size: 3.2rem;
+    font-size: 3.4rem;
   }
 }
 
@@ -644,18 +647,18 @@ nav.main-nav {
 }
 
 .section-para {
-  color: var(--primary);
+  color: #22281b;
   font-family: var(--font-para);
-  font-size: 0.95rem;
-  font-weight: 300;
-  line-height: 1.5;
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.6;
   text-wrap: balance;
-  opacity: 0.88;
+  opacity: 0.95;
 }
 
 @media (min-width: 768px) {
   .section-para {
-    font-size: 1.15rem;
+    font-size: 1.22rem;
   }
 }
 
@@ -778,15 +781,15 @@ nav.main-nav {
 
 .process-main-title {
   font-family: var(--font-heading);
-  font-size: 1.8rem;
-  font-weight: 200;
+  font-size: 2.2rem;
+  font-weight: 600;
   margin-bottom: 1.5rem;
   color: var(--primary);
 }
 
 @media (min-width: 768px) {
   .process-main-title {
-    font-size: 3rem;
+    font-size: 3.4rem;
     margin-bottom: 2rem;
   }
 }
@@ -820,46 +823,46 @@ nav.main-nav {
 
 .dynamic-step-label {
   font-family: var(--font-para);
-  font-size: 0.85rem;
-  font-weight: 400;
+  font-size: 0.95rem;
+  font-weight: 600;
   letter-spacing: 0.2em;
   color: var(--primary);
 }
 
 @media (min-width: 768px) {
   .dynamic-step-label {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
   }
 }
 
 .dynamic-step-title {
   font-family: var(--font-heading);
-  font-size: 1.3rem;
-  font-weight: 300;
-  line-height: 1.1;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.15;
   letter-spacing: -0.01em;
   color: var(--primary);
 }
 
 @media (min-width: 768px) {
   .dynamic-step-title {
-    font-size: 1.9rem;
+    font-size: 2.1rem;
   }
 }
 
 .dynamic-step-desc {
   font-family: var(--font-para);
-  font-size: 0.8rem;
-  font-weight: 300;
-  line-height: 1.5;
-  color: var(--primary);
+  font-size: 0.92rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #22281b;
   text-wrap: balance;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 @media (min-width: 768px) {
   .dynamic-step-desc {
-    font-size: 0.92rem;
+    font-size: 1.05rem;
   }
 }
 

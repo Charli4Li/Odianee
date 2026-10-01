@@ -1,6 +1,6 @@
 /**
  * 3D Floating Gallery for ODIANEE
- * Replicating https://pahari.vercel.app/ 3D WebGL experience using Three.js & GSAP
+ * Flawless front-facing billboarding, zero-spin axis, hover translucency, and detail inspection
  */
 
 class FloatingGallery {
@@ -25,12 +25,15 @@ class FloatingGallery {
     this.selectedCard = null;
     this.selectedIndex = null;
 
+    // Gallery collective orbit rotation around Y axis
+    this.currentRotationY = 0;
+    this.rotationVelocity = 0;
+
     // Interaction variables
     this.isDragging = false;
     this.isDragMove = false;
     this.downPosition = { x: 0, y: 0 };
     this.previousMousePosition = { x: 0, y: 0 };
-    this.rotationVelocity = 0;
     this.mouseNormalized = { x: 0, y: 0 };
     this.hoveredCard = null;
 
@@ -75,17 +78,13 @@ class FloatingGallery {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.outputEncoding = THREE.sRGBEncoding;
 
-    // Main group holding all cards for collective rotation
-    this.galleryGroup = new THREE.Group();
-    this.scene.add(this.galleryGroup);
+    // Group for holding the cards
+    this.cardsContainer = new THREE.Group();
+    this.scene.add(this.cardsContainer);
   }
 
   initLights() {
-    // Keep cards vibrant: no dense fog on card surfaces
-    // Subtle background fog only for distant particles
-    this.scene.fog = new THREE.Fog(0xe8dcc5, 25, 60);
-
-    // Warm ambient light
+    // Warm ambient light so colors are vivid and natural
     const ambientLight = new THREE.AmbientLight(0xfffdf7, 1.4);
     this.scene.add(ambientLight);
 
@@ -136,16 +135,9 @@ class FloatingGallery {
     const borderGeometry = new THREE.PlaneGeometry(1.54, 2.04);
 
     ARTS_DATA.forEach((item, index) => {
-      // Main positioning group for lerping to sphere/cylinder coordinates
-      const mainGroup = new THREE.Group();
       const initialPos = this.spherePositions[index];
-      mainGroup.position.copy(initialPos);
 
-      // Float group for orientation & billboarding
-      const floatGroup = new THREE.Group();
-      mainGroup.add(floatGroup);
-
-      // Card texture: high-resolution, vivid colors, fog disabled so cards stay crisp
+      // Card texture: crisp, saturated, no fog washout
       const texture = textureLoader.load(item.image);
       texture.generateMipmaps = true;
       texture.minFilter = THREE.LinearMipmapLinearFilter;
@@ -154,7 +146,7 @@ class FloatingGallery {
         map: texture,
         transparent: true,
         opacity: 1.0,
-        fog: false, // Prevents fog from washing out cards
+        fog: false,
         side: THREE.DoubleSide
       });
 
@@ -166,28 +158,26 @@ class FloatingGallery {
         side: THREE.DoubleSide
       });
 
+      // Main Card Mesh placed directly in cardsContainer
       const cardMesh = new THREE.Mesh(cardGeometry, cardMaterial);
-      cardMesh.userData = { id: item.id, item, index, parentCard: mainGroup };
+      cardMesh.position.copy(initialPos);
+      cardMesh.userData = { id: item.id, item, index };
 
-      // Placard border
+      // Placard border child
       const borderMesh = new THREE.Mesh(borderGeometry, borderMaterial);
-      borderMesh.position.z = -0.005;
-      floatGroup.add(borderMesh);
+      borderMesh.position.set(0, 0, -0.005);
+      cardMesh.add(borderMesh);
 
-      floatGroup.add(cardMesh);
-      this.galleryGroup.add(mainGroup);
+      this.cardsContainer.add(cardMesh);
 
       this.cards.push({
         id: item.id,
         item,
         index,
-        mainGroup,
-        floatGroup,
         mesh: cardMesh,
         borderMesh,
         targetPos: initialPos.clone(),
         seed: Math.random() * 100,
-        scaleMultiplier: 1.0,
         targetScale: 1.0,
         targetOpacity: 1.0
       });
@@ -201,7 +191,7 @@ class FloatingGallery {
       textureLoader.load('assets/textures/paper-2.png')
     ];
 
-    const particleCount = 90;
+    const particleCount = 80;
     this.particlesGroup = new THREE.Group();
     this.scene.add(this.particlesGroup);
 
@@ -249,7 +239,7 @@ class FloatingGallery {
         if (Math.hypot(e.clientX - this.downPosition.x, e.clientY - this.downPosition.y) > 6) {
           this.isDragMove = true;
         }
-        this.rotationVelocity += deltaX * 0.0025;
+        this.rotationVelocity += deltaX * 0.0028;
         this.previousMousePosition = { x: e.clientX, y: e.clientY };
       }
     });
@@ -268,10 +258,10 @@ class FloatingGallery {
       this.isDragging = false;
     });
 
-    // Mouse Wheel (Rotates gallery around Y axis)
+    // Mouse Wheel (Rotates gallery orbit around Y axis)
     window.addEventListener('wheel', (e) => {
       if (this.isDetailOpen) return;
-      this.rotationVelocity += e.deltaY * 0.0006;
+      this.rotationVelocity += e.deltaY * 0.0007;
     }, { passive: true });
 
     // Touch Support for mobile devices
@@ -291,7 +281,7 @@ class FloatingGallery {
         if (Math.abs(touchX - this.downPosition.x) > 6) {
           this.isDragMove = true;
         }
-        this.rotationVelocity += deltaX * 0.003;
+        this.rotationVelocity += deltaX * 0.0035;
         this.previousMousePosition = { x: touchX, y: e.touches[0].clientY };
       }
     }, { passive: true });
@@ -382,7 +372,7 @@ class FloatingGallery {
     if (this.detailModal) {
       this.detailModal.classList.add('active');
       if (window.gsap) {
-        gsap.fromTo('.detail-close-btn', { opacity: 0, y: -16 }, { opacity: 0.75, y: 0, duration: 0.4, ease: 'power3.out' });
+        gsap.fromTo('.detail-close-btn', { opacity: 0, y: -16 }, { opacity: 0.85, y: 0, duration: 0.4, ease: 'power3.out' });
         gsap.fromTo('.detail-title-col', { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', delay: 0.1 });
         gsap.fromTo('.detail-desc-col', { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', delay: 0.2 });
       }
@@ -447,24 +437,22 @@ class FloatingGallery {
       }
     }
 
-    // Collective group rotation and inertia damping
-    this.galleryGroup.rotation.y += this.rotationVelocity;
+    // Collective orbit rotation around Y axis
+    this.currentRotationY += this.rotationVelocity;
     this.rotationVelocity *= 0.92; // Damping
 
-    // Camera target calculations
+    // Detail mode: smoothly align gallery orbit so selected card faces front center
     if (this.isDetailOpen && this.selectedCard) {
-      const cardLocalPos = this.selectedCard.targetPos;
-      const cardY = cardLocalPos.y;
-      const distFromCenter = Math.sqrt(cardLocalPos.x * cardLocalPos.x + cardLocalPos.z * cardLocalPos.z);
+      const cardBasePos = this.selectedCard.targetPos;
+      const targetAngleY = -Math.atan2(cardBasePos.x, cardBasePos.z);
+      this.currentRotationY = THREE.MathUtils.lerp(this.currentRotationY, targetAngleY, 0.08);
 
-      // Camera zooms toward the card height
-      const zOffset = isMobile ? 8.2 : 3.8;
+      const cardY = cardBasePos.y;
+      const distFromCenter = Math.sqrt(cardBasePos.x * cardBasePos.x + cardBasePos.z * cardBasePos.z);
+      const zOffset = isMobile ? 8.0 : 3.8;
+
       this.targetCamPos.set(0, cardY, distFromCenter + zOffset);
       this.targetCamLookAt.set(0, cardY, distFromCenter);
-
-      // Rotate group so selected card faces front
-      const targetAngleY = -Math.atan2(cardLocalPos.x, cardLocalPos.z);
-      this.galleryGroup.rotation.y = THREE.MathUtils.lerp(this.galleryGroup.rotation.y, targetAngleY, 0.08);
     } else {
       // Normal Parallax Camera tilt with mouse
       const targetCamX = 0.75 * this.mouseNormalized.x;
@@ -479,63 +467,50 @@ class FloatingGallery {
     this.currentCamLookAt.lerp(this.targetCamLookAt, 0.05);
     this.camera.lookAt(this.currentCamLookAt);
 
-    // Compute inverse quaternion of galleryGroup to align card orientations
-    const groupWorldQuat = new THREE.Quaternion();
-    this.galleryGroup.getWorldQuaternion(groupWorldQuat);
-    const invGroupQuat = groupWorldQuat.clone().invert();
+    // Orbit trigonometry
+    const cosOrbit = Math.cos(this.currentRotationY);
+    const sinOrbit = Math.sin(this.currentRotationY);
 
-    // Cards floating wave, billboarding, opacity & orientation
+    // Cards positioning, billboarding, opacity & scale
     this.cards.forEach((card, i) => {
-      // Lerp position to current view geometry (sphere / cylinder)
-      card.mainGroup.position.lerp(card.targetPos, 0.08);
+      // Calculate 3D orbit position around center Y axis
+      const orbitedX = card.targetPos.x * cosOrbit + card.targetPos.z * sinOrbit;
+      const orbitedZ = -card.targetPos.x * sinOrbit + card.targetPos.z * cosOrbit;
+      const orbitedY = card.targetPos.y;
 
-      // Determine target opacity & scale based on hover / detail state
+      // Idle vertical float bobbing
+      const seed = card.seed;
+      const floatY = (!this.isDetailOpen || this.selectedIndex !== i) 
+        ? Math.sin(elapsedTime * 1.5 + seed) * 0.08 
+        : 0;
+
+      // Lerp position to destination
+      card.mesh.position.x = THREE.MathUtils.lerp(card.mesh.position.x, orbitedX, 0.08);
+      card.mesh.position.y = THREE.MathUtils.lerp(card.mesh.position.y, orbitedY + floatY, 0.08);
+      card.mesh.position.z = THREE.MathUtils.lerp(card.mesh.position.z, orbitedZ, 0.08);
+
+      // BILLBOARDING: Cards ALWAYS face directly towards the camera!
+      // This physically prevents any roll or spinning on their own axis!
+      card.mesh.quaternion.copy(this.camera.quaternion);
+
+      // Opacity & Scale logic (Requirement 5)
       if (this.isDetailOpen) {
-        // In detail view: selected card is full opacity, other cards fade to pale translucent
         card.targetOpacity = (this.selectedIndex === i) ? 1.0 : 0.08;
-        card.targetScale = (this.selectedIndex === i) ? 1.35 : 0.95;
+        card.targetScale = (this.selectedIndex === i) ? 1.4 : 0.95;
       } else if (this.hoveredCard !== null) {
-        // Requirement 5: Hovered image stays full actual color and opacity;
-        // Non-hovered images become translucent and pale!
-        card.targetOpacity = (this.hoveredCard === i) ? 1.0 : 0.22;
-        card.targetScale = (this.hoveredCard === i) ? 1.15 : 1.0;
+        // When hovered on one image: THAT image stays full color & opacity;
+        // All non-hovered images become translucent and pale!
+        card.targetOpacity = (this.hoveredCard === i) ? 1.0 : 0.25;
+        card.targetScale = (this.hoveredCard === i) ? 1.16 : 1.0;
       } else {
-        // Requirement 5: When NO cursor hover, all images stay fully opaque and vivid!
+        // No hover: All images stay full vibrant color and 100% opaque!
         card.targetOpacity = 1.0;
         card.targetScale = 1.0;
       }
 
-      // Orientation & Billboarding (Requirements 3 & 4)
-      if (this.isDetailOpen && this.selectedIndex === i) {
-        // Requirement 4: On click, card is 100% upright, flat, squarely facing the viewer (NO skew!)
-        card.floatGroup.position.set(0, 0, 0);
-        // Direct alignment with camera orientation:
-        card.floatGroup.quaternion.copy(invGroupQuat.clone().multiply(this.camera.quaternion));
-      } else {
-        // Requirement 3: Stop spinning in their own axis!
-        // Start from camera world orientation so cards directly point towards the user
-        const targetWorldQuat = this.camera.quaternion.clone();
-
-        // Natural subtle tilt (like reference website) and gentle breathing sway
-        const seed = card.seed;
-        const floatBob = Math.sin(elapsedTime * 1.4 + seed) * 0.08;
-        card.floatGroup.position.y = floatBob;
-
-        const tiltX = -0.06; // slight gentle tilt back
-        const swayZ = Math.sin(elapsedTime * 0.9 + seed) * 0.02;
-        const swayX = Math.cos(elapsedTime * 0.75 + seed) * 0.015;
-
-        const tiltEuler = new THREE.Euler(tiltX + swayX, 0, swayZ, 'YXZ');
-        const tiltQuat = new THREE.Quaternion().setFromEuler(tiltEuler);
-        targetWorldQuat.multiply(tiltQuat);
-
-        // Convert world orientation into galleryGroup local space
-        card.floatGroup.quaternion.copy(invGroupQuat.clone().multiply(targetWorldQuat));
-      }
-
-      // Smoothly lerp scale & opacity
-      card.scaleMultiplier = THREE.MathUtils.lerp(card.scaleMultiplier, card.targetScale, 0.08);
-      card.mainGroup.scale.set(card.scaleMultiplier, card.scaleMultiplier, card.scaleMultiplier);
+      // Smooth scale and opacity transitions
+      const currentScale = THREE.MathUtils.lerp(card.mesh.scale.x, card.targetScale, 0.08);
+      card.mesh.scale.set(currentScale, currentScale, currentScale);
 
       card.mesh.material.opacity = THREE.MathUtils.lerp(card.mesh.material.opacity, card.targetOpacity, 0.12);
       card.borderMesh.material.opacity = THREE.MathUtils.lerp(card.borderMesh.material.opacity, card.targetOpacity * 0.15, 0.12);
