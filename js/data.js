@@ -101,38 +101,46 @@ const ARTS_DATA = [
   }
 ];
 
-const HISTORY_DATA = [
+const EXPERIENCE_DATA = [
   {
     id: "01",
-    title: "What Is Pahari Art?",
-    description: "Pahari painting is a tradition of miniature painting that flourished in the Himalayan foothills of North India, celebrating intense emotional resonance, delicate naturalism, and timeless spiritual devotion.",
-    art: "assets/history/history-art-1.png"
+    title: "Hospitality",
+    description: "Experiencing every guest with the warm, heartfelt care of traditional Odia home culture.",
+    art: "assets/Middle/1.png"
   },
   {
     id: "02",
-    title: "The Origins",
-    description: "The origins of Pahari painting lie in the decline of the Mughal Empire and the migration of skilled atelier artists to the tranquil, mountain-guarded valleys of northern India.",
-    art: "assets/history/history-art-2.png"
+    title: "Service",
+    description: "Delivering attentive, seamless care rooted in genuine respect and comfort.",
+    art: "assets/Middle/2.png"
   },
   {
     id: "03",
-    title: "The Schools",
-    description: "Basohli, Guler, Kangra, Chamba, and Mandi each shaped unique visual languages — from vibrant unmixed pigments and beetle-wing jewel effects to soft poetic lyrical realism.",
-    art: "assets/history/history-art-3.png"
+    title: "Heritage",
+    description: "Celebrating centuries of Odia culinary traditions and cultural pride in every detail.",
+    art: "assets/Middle/3.png"
   },
   {
     id: "04",
-    title: "The Subjects",
-    description: "Love, devotion, musical modes (Ragamala), poetry, and mythology became the living soul of Pahari art, capturing the intimate dialogue between human sentiment and cosmic beauty.",
-    art: "assets/history/history-art-4.png"
+    title: "Art",
+    description: "Showcasing the timeless beauty and rich artistic craftsmanship of Odisha.",
+    art: "assets/Middle/4.png"
   },
   {
     id: "05",
-    title: "Legacy",
-    description: "Today, Pahari paintings are celebrated worldwide in premier museums as enduring masterpieces of poetic storytelling, fine draughtsmanship, and transcendent aesthetic grace.",
-    art: "assets/history/history-art-5.png"
+    title: "Roots",
+    description: "Grounded in the authentic, earth-born flavors and age-old customs of the land.",
+    art: "assets/Middle/5.png"
+  },
+  {
+    id: "06",
+    title: "Coming Soon...",
+    description: "Our journey of cultural revival continues to unfold. Stay tuned as we prepare to unveil our next immersive heritage chapter.",
+    art: ""
   }
 ];
+
+const HISTORY_DATA = EXPERIENCE_DATA;
 
 const PROCESS_DATA = [
   {
