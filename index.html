@@ -30,7 +30,6 @@
         <a href="gallery.html" class="nav-link" data-view="process">Gallery</a>
       </nav>
       <div class="header-credit">
-        <span>Curated for</span>
         <a href="index.html"><span>ODIANEE</span></a>
       </div>
     </div>
@@ -63,12 +62,25 @@
         </div>
       </section>
 
-      <!-- Bottom View Switcher Pill -->
+      <!-- Bottom Left View Switcher Pill -->
       <div class="bottom-controls">
         <div class="view-switcher-pill">
-          <span class="view-label">Change the View :</span>
-          <button id="btn-sphere" class="view-btn active">sphere</button>
-          <button id="btn-cylinder" class="view-btn">cylinder</button>
+          <span class="view-label">View</span>
+          <button id="btn-sphere" class="view-btn active" title="Sphere View" aria-label="Sphere View">
+            <svg class="view-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <ellipse cx="12" cy="12" rx="10" ry="4"/>
+              <line x1="12" y1="2" x2="12" y2="22"/>
+            </svg>
+            <span>Sphere</span>
+          </button>
+          <button id="btn-cylinder" class="view-btn" title="Cylinder View" aria-label="Cylinder View">
+            <svg class="view-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="6" rx="8" ry="3.5"/>
+              <path d="M4 6v12c0 1.93 3.58 3.5 8 3.5s8-1.57 8-3.5V6"/>
+            </svg>
+            <span>Cylinder</span>
+          </button>
         </div>
       </div>
 
