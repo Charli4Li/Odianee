@@ -366,19 +366,20 @@ nav.main-nav {
   overflow: visible;
 }
 
-.text-dotted-outline {
+.marching-ants-stroke {
   fill: none;
   stroke: var(--primary);
-  stroke-width: 2.2px;
-  stroke-dasharray: 4 9;
+  stroke-width: 4.5px;
   stroke-linecap: round;
-  animation: slowMarchDots 45s linear infinite;
-  opacity: 0.88;
+  stroke-linejoin: round;
+  stroke-dasharray: 12 18;
+  animation: marchingAnts 24s linear infinite;
+  opacity: 0.92;
 }
 
-@keyframes slowMarchDots {
+@keyframes marchingAnts {
   to {
-    stroke-dashoffset: -260;
+    stroke-dashoffset: -300;
   }
 }
 
