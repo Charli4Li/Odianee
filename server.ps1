@@ -44,6 +44,7 @@ try {
 
                 $bytes = [System.IO.File]::ReadAllBytes($filePath)
                 $response.ContentType = $mime
+                $response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate")
                 $response.ContentLength64 = $bytes.Length
                 $response.StatusCode = 200
                 if ($request.HttpMethod -ne "HEAD") {
