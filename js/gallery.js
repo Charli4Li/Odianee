@@ -120,7 +120,7 @@ this.cardsContainer = new THREE.Group();
     ARTS_DATA.forEach((item, index) => {
       const initialPos = this.spherePositions[index];
 
-const texture = textureLoader.load(item.image);
+const texture = textureLoader.load(encodeURI(item.image));
       texture.encoding = THREE.LinearEncoding;
       texture.generateMipmaps = true;
       texture.minFilter = THREE.LinearMipmapLinearFilter;

@@ -1,103 +1,103 @@
 const ARTS_DATA = [
   {
     id: 1,
-    slug: "1",
-    title: "1",
+    slug: "authentic-odia-cuisine",
+    title: "Authentic Odia Cuisine",
     roman: "I",
     image: "assets/front page/1.png",
     time: "",
     tags: [],
-    description: ""
+    description: "We serve authentic Odia cuisine crafted straight from the heart of traditional home kitchens. Rooted in rich heritage and delicate flavors, our dishes feature low-oil preparations, fragrant pancha phutana tempering, and wholesome staples like Pakhala, Dalma, and fresh seafood. Every bite offers the comfort, simplicity, and warmth of a true home-cooked Odia meal, cooked with love and centuries-old culinary tradition."
   },
   {
     id: 2,
-    slug: "2",
-    title: "2",
+    slug: "iconic-odia-handicraft",
+    title: "Iconic Odia Handicraft",
     roman: "II",
     image: "assets/front page/2.png",
     time: "",
     tags: [],
-    description: ""
+    description: "Adorned with exquisite local craftsmanship, our space celebrates Odisha's rich artisan legacy. From intricate details to timeless handiwork, every corner tells a story of artistic heritage."
   },
   {
     id: 3,
-    slug: "3",
-    title: "3",
+    slug: "warm-dining-ambience",
+    title: "Warm Dining Ambience",
     roman: "III",
     image: "assets/front page/3.png",
     time: "",
     tags: [],
-    description: ""
+    description: "Immerse yourself in an inviting, cozy atmosphere designed for meaningful moments. Gentle lighting and soothing textures combine to create a deeply relaxing space where every meal feels like home."
   },
   {
     id: 4,
-    slug: "4",
-    title: "4",
+    slug: "fresh-and-organic-ingredients",
+    title: "Fresh and Organic Ingredients",
     roman: "IV",
     image: "assets/front page/4.png",
     time: "",
     tags: [],
-    description: ""
+    description: "We prioritize purity and quality by sourcing farm-fresh, organic produce for every creation. Our commitment to natural, wholesome ingredients guarantees authentic taste and nourishing meals."
   },
   {
     id: 5,
-    slug: "5",
-    title: "5",
+    slug: "cultural-heritage-and-nature",
+    title: "Cultural Heritage and Nature",
     roman: "V",
     image: "assets/front page/5.png",
     time: "",
     tags: [],
-    description: ""
+    description: "Harmoniously blending timeless regional traditions with organic, earthy elements, our space offers a grounding experience. Connect with the serene roots of nature and deep cultural pride."
   },
   {
     id: 6,
-    slug: "6",
-    title: "6",
+    slug: "years-of-service-and-hospitality",
+    title: "Years of Service and Hospitality",
     roman: "VI",
     image: "assets/front page/6.png",
     time: "",
     tags: [],
-    description: ""
+    description: "Built on a strong legacy of genuine care and dedicated service, we treat every guest like family. Our heartfelt hospitality reflects years of passion, warmth, and attention to detail."
   },
   {
     id: 7,
-    slug: "7",
-    title: "7",
+    slug: "comfortable-waiting-spaces",
+    title: "Comfortable Waiting Spaces",
     roman: "VII",
     image: "assets/front page/7.png",
     time: "",
     tags: [],
-    description: ""
+    description: "Relax effortless while you wait in thoughtfully designed lounge areas. Intended for ease and tranquility, our waiting spaces ensure your experience is pleasant right from the moment you arrive."
   },
   {
     id: 8,
-    slug: "8",
-    title: "8",
+    slug: "separate-workstations",
+    title: "Separate Workstations",
     roman: "VIII",
     image: "assets/front page/8.png",
     time: "",
     tags: [],
-    description: ""
+    description: "Designed for focus and productivity, our dedicated work areas offer a quiet, functional environment. Seamlessly balance work and leisure in a peaceful, comfortable setting."
   },
   {
     id: 9,
-    slug: "9",
-    title: "9",
+    slug: "cultural-odia-literature",
+    title: "Cultural Odia Literature",
     roman: "IX",
     image: "assets/front page/9.png",
     time: "",
     tags: [],
-    description: ""
+    description: "Surround yourself with the wisdom and poetry of Odisha's literary traditions. Our curated reading corners celebrate the region's storied history, folklore, and intellectual spirit."
   },
   {
     id: 10,
-    slug: "10",
-    title: "10",
+    slug: "traditional-art-paintings",
+    title: "Traditional Art Paintings",
     roman: "X",
     image: "assets/front page/10.png",
     time: "",
     tags: [],
-    description: ""
+    description: "Enriched with classic folk art and expressive canvases, our walls serve as a gallery of regional expression. Each artwork captures the timeless narrative and vibrant colors of local tradition."
   }
 ];
 
