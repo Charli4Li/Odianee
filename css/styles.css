@@ -372,32 +372,29 @@ nav.main-nav {
   stroke-width: 4.5px;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 12 18;
+  stroke-dasharray: 20 12;
   animation: marchingAnts 24s linear infinite;
   opacity: 0.92;
 }
 
 @keyframes marchingAnts {
   to {
-    stroke-dashoffset: -300;
+    stroke-dashoffset: -320;
   }
 }
 
 .animated-red-dot {
   transform-origin: 319px 454px;
-  animation: redDotTravel 6.5s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate;
+  animation: redDotTravel 3.2s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate;
   filter: drop-shadow(0 2px 6px rgba(227, 30, 36, 0.35));
 }
 
 @keyframes redDotTravel {
-  0%, 15% {
+  0%, 12% {
     transform: translate(0px, 0px);
   }
-  48% {
-    transform: translate(22px, 8px);
-  }
-  85%, 100% {
-    transform: translate(46px, 21px);
+  88%, 100% {
+    transform: translate(52px, 0px);
   }
 }
 
