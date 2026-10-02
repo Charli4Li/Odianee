@@ -8,9 +8,7 @@ class FloatingGallery {
     this.detailModal = document.getElementById('detail-modal');
     
     this.detailTitle = document.getElementById('detail-title');
-    this.detailMeta = document.getElementById('detail-meta');
     this.detailDesc = document.getElementById('detail-desc');
-    this.detailTags = document.getElementById('detail-tags');
     this.detailCloseBtn = document.getElementById('detail-close-btn');
 
     this.sphereBtn = document.getElementById('btn-sphere');
@@ -364,20 +362,7 @@ if (this.centerHero) this.centerHero.classList.add('hidden-hero');
     if (this.bottomControls) this.bottomControls.classList.add('hidden-controls');
 
 if (this.detailTitle) this.detailTitle.textContent = item.title;
-    if (this.detailMeta) this.detailMeta.textContent = `${item.time} • ${item.tags ? item.tags[0] : ''}`;
     if (this.detailDesc) this.detailDesc.textContent = item.description;
-
-    if (this.detailTags) {
-      this.detailTags.innerHTML = '';
-      if (item.tags) {
-        item.tags.forEach(t => {
-          const badge = document.createElement('span');
-          badge.className = 'detail-tag';
-          badge.textContent = t;
-          this.detailTags.appendChild(badge);
-        });
-      }
-    }
 
 if (this.detailModal) {
       this.detailModal.classList.add('active');
