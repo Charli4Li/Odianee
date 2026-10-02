@@ -10,15 +10,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Federo&family=Noto+Sans+Oriya:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css?v=leaves_2" />
 
   <script src="assets/libs/three.min.js"></script>
   <script src="assets/libs/gsap.min.js"></script>
   <script src="assets/libs/ScrollTrigger.min.js"></script>
 </head>
-<body>
+<body class="page-journey">
+  <!-- Botanical Leaf Background Layer directly on Body, just above background image -->
+  <div class="leaf-bg-layer" aria-hidden="true" style="position: fixed; inset: 0; width: 100vw; height: 100vh; background-image: url('assets/leaf-pattern.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; z-index: 1; pointer-events: none; opacity: 0.92;"></div>
 
-  <header class="site-header">
+  <header class="site-header" style="position: fixed; z-index: 60;">
     <div class="header-inner">
       <nav class="main-nav">
         <a href="index.html" class="nav-link" data-view="collection">Home</a>
@@ -31,11 +33,8 @@
     </div>
   </header>
 
-  <div id="app">
-    <section id="view-process" class="view-layer active" aria-label="ODIANEE Journey">
-      <!-- Leaf pattern background layer just above background image -->
-      <div class="leaf-bg-layer" aria-hidden="true"></div>
-
+  <div id="app" style="position: relative; z-index: 5;">
+    <section id="view-process" class="view-layer active" aria-label="ODIANEE Journey" style="position: relative; z-index: 5;">
       <div class="process-container">
         <div class="process-pin-wrapper">
 

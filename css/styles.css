@@ -72,18 +72,36 @@ html, body {
    with all page elements overlapping this along with the background.
    ============================================================ */
 .leaf-bg-layer {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: url('../assets/leaf-pattern.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.88;
-  transition: opacity 0.4s ease;
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-image: url('../assets/leaf-pattern.jpg') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  opacity: 0.92 !important;
+  display: block !important;
+}
+
+body.page-experience,
+body.page-journey {
+  background-color: #0e0c0a !important;
+  background-image: url('../assets/leaf-pattern.jpg'), url('../assets/primary-bg.png') !important;
+  background-size: cover, cover !important;
+  background-position: center, center !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-attachment: fixed, fixed !important;
+}
+
+body.page-experience #app,
+body.page-journey #app {
+  position: relative;
+  z-index: 5;
 }
 
 .view-layer {
