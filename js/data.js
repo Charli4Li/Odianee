@@ -1,9 +1,4 @@
-/**
- * Data definitions for Odianee Floating Gallery
- * Replicating https://pahari.vercel.app/ with the Odianee restaurant logo & heritage
- */
-
-const ARTS_DATA = [
+﻿const ARTS_DATA = [
   {
     id: 1,
     slug: "radha-krishna",

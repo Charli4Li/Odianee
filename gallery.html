@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -7,22 +7,18 @@
   <meta name="description" content="Explore the step-by-step master craft, pigments, and heritage artistry of ODIANEE." />
   <link rel="icon" href="assets/logo.png" type="image/png" />
 
-  <!-- Google Fonts: Federo, Noto Sans Oriya & Plus Jakarta Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Federo&family=Noto+Sans+Oriya:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css" />
+<link rel="stylesheet" href="css/styles.css" />
 
-  <!-- Local Vendor Libraries -->
-  <script src="assets/libs/three.min.js"></script>
+<script src="assets/libs/three.min.js"></script>
   <script src="assets/libs/gsap.min.js"></script>
   <script src="assets/libs/ScrollTrigger.min.js"></script>
 </head>
 <body>
 
-  <!-- Fixed Global Header -->
-  <header class="site-header">
+<header class="site-header">
     <div class="header-inner">
       <nav class="main-nav">
         <a href="index.html" class="nav-link" data-view="collection">Home</a>
@@ -36,14 +32,13 @@
   </header>
 
   <div id="app">
-    <!-- View: Gallery / Process (Card Stack Scrub) -->
+    
     <section id="view-process" class="view-layer active">
       <div class="process-container">
         <div class="process-pin-wrapper">
           <div class="process-main">
-            
-            <!-- Left Text Column -->
-            <div class="process-text-col">
+
+<div class="process-text-col">
               <h1 class="process-main-title">The Art of Making</h1>
               <div class="dynamic-text-stage">
                 
@@ -92,8 +87,7 @@
               </div>
             </div>
 
-            <!-- Right Cards Stack Column -->
-            <div class="process-cards-col">
+<div class="process-cards-col">
               <div class="cards-stage">
                 
                 <div class="stack-card" style="z-index: 10;">
@@ -140,8 +134,7 @@
     </section>
   </div>
 
-  <!-- Morphing Curved SVG Curtain Overlay -->
-  <div id="transition-curtain" class="transition-curtain">
+<div id="transition-curtain" class="transition-curtain">
     <svg class="transition-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
       <path id="transition-path" class="transition-path" d="M 0 0 Q 50 0 100 0 L 100 0 Q 50 0 0 0 Z"></path>
     </svg>
@@ -151,11 +144,10 @@
 
   <script src="js/process.js"></script>
   <script src="js/transitions.js"></script>
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
+  <script>window.addEventListener('DOMContentLoaded', () => {
       new ProcessView();
       new PageRouter();
     });
-  </script>
+</script>
 </body>
 </html>

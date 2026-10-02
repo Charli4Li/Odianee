@@ -1,9 +1,3 @@
-/**
- * 3D Floating Gallery for ODIANEE
- * Flawless front-facing billboarding, rich saturated colors (no paleness),
- * hover translucency, and detail inspection
- */
-
 class FloatingGallery {
   constructor() {
     this.container = document.getElementById('canvas-container');
@@ -22,33 +16,29 @@ class FloatingGallery {
     this.sphereBtn = document.getElementById('btn-sphere');
     this.cylinderBtn = document.getElementById('btn-cylinder');
 
-    this.currentView = 'sphere'; // 'sphere' | 'cylinder'
+    this.currentView = 'sphere'; 
     this.isDetailOpen = false;
     this.selectedCard = null;
     this.selectedIndex = null;
 
-    // Gallery collective orbit rotation around Y axis
-    this.currentRotationY = 0;
+this.currentRotationY = 0;
     this.rotationVelocity = 0;
 
-    // Interaction variables
-    this.isDragging = false;
+this.isDragging = false;
     this.isDragMove = false;
     this.downPosition = { x: 0, y: 0 };
     this.previousMousePosition = { x: 0, y: 0 };
     this.mouseNormalized = { x: 0, y: 0 };
     this.hoveredCard = null;
 
-    // Raycaster
-    this.raycaster = new THREE.Raycaster();
+this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2(-999, -999);
 
     this.cards = [];
     this.paperParticles = [];
     this.clock = new THREE.Clock();
 
-    // Default camera targets
-    this.defaultCamPos = new THREE.Vector3(0, 0, 7.5);
+this.defaultCamPos = new THREE.Vector3(0, 0, 7.5);
     this.targetCamPos = this.defaultCamPos.clone();
     this.targetCamLookAt = new THREE.Vector3(0, 0, 0);
     this.currentCamLookAt = new THREE.Vector3(0, 0, 0);
@@ -79,13 +69,9 @@ class FloatingGallery {
     this.renderer.setSize(width, height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+this.renderer.outputEncoding = THREE.LinearEncoding;
 
-
-    // Set outputEncoding to LinearEncoding so Three.js never gamma-bleaches or washes out textures
-    this.renderer.outputEncoding = THREE.LinearEncoding;
-
-    // Container holding cards
-    this.cardsContainer = new THREE.Group();
+this.cardsContainer = new THREE.Group();
     this.scene.add(this.cardsContainer);
   }
 
@@ -100,7 +86,7 @@ class FloatingGallery {
 
   computeSpherePositions(count, radius = 5.0) {
     const positions = [];
-    const phi = Math.PI * (3 - Math.sqrt(5)); // Golden angle (~2.39996 rad)
+    const phi = Math.PI * (3 - Math.sqrt(5)); 
     for (let i = 0; i < count; i++) {
       const y = 1 - (i / (count - 1)) * 2;
       const radiusAtY = Math.sqrt(1 - y * y);
@@ -136,18 +122,12 @@ class FloatingGallery {
     ARTS_DATA.forEach((item, index) => {
       const initialPos = this.spherePositions[index];
 
-      // Load texture with LinearEncoding to guarantee true source pixel fidelity
-      const texture = textureLoader.load(item.image);
+const texture = textureLoader.load(item.image);
       texture.encoding = THREE.LinearEncoding;
       texture.generateMipmaps = true;
       texture.minFilter = THREE.LinearMipmapLinearFilter;
 
-      // Custom high-fidelity ShaderMaterial:
-      // - Direct Rec.709 color fidelity
-      // - Rich contrast (+18%) and deep vibrant saturation (+28%)
-      // - Eliminates Three.js gamma bleaching and double-sRGB washing out
-      // - Clean opacity blending for hover translucency
-      const cardMaterial = new THREE.ShaderMaterial({
+const cardMaterial = new THREE.ShaderMaterial({
         uniforms: {
           map: { value: texture },
           opacity: { value: 1.0 },
@@ -174,14 +154,9 @@ class FloatingGallery {
             vec4 tex = texture2D(map, vUv);
             vec3 col = tex.rgb;
 
-            // Rec.709 Luma for accurate saturation enhancement
             float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
             col = mix(vec3(luma), col, saturation);
-
-            // High contrast curve: deepens shadows and blacks, makes rich tones punchy
             col = (col - 0.5) * contrast + 0.5;
-
-            // Controlled brightness
             col *= brightness;
 
             col = clamp(col, 0.0, 1.0);
@@ -194,8 +169,7 @@ class FloatingGallery {
         side: THREE.FrontSide
       });
 
-      // Placard dark outline border
-      const borderMaterial = new THREE.MeshBasicMaterial({
+const borderMaterial = new THREE.MeshBasicMaterial({
         color: 0x222a1b,
         transparent: true,
         opacity: 0.45,
@@ -204,8 +178,7 @@ class FloatingGallery {
       const borderMesh = new THREE.Mesh(borderGeometry, borderMaterial);
       borderMesh.position.set(0, 0, -0.005);
 
-      // Main Card Mesh
-      const cardMesh = new THREE.Mesh(cardGeometry, cardMaterial);
+const cardMesh = new THREE.Mesh(cardGeometry, cardMaterial);
       cardMesh.position.copy(initialPos);
       cardMesh.userData = { id: item.id, item, index };
 
@@ -269,8 +242,7 @@ class FloatingGallery {
   setupEvents() {
     window.addEventListener('resize', () => this.onResize());
 
-    // Mouse Move (Parallax, Dragging & Raycasting)
-    window.addEventListener('mousemove', (e) => {
+window.addEventListener('mousemove', (e) => {
       this.mouseNormalized.x = (e.clientX / window.innerWidth - 0.5) * 2;
       this.mouseNormalized.y = (e.clientY / window.innerHeight - 0.5) * 2;
 
@@ -287,14 +259,12 @@ class FloatingGallery {
       }
     });
 
-    // Reset hover when mouse leaves canvas container
-    this.container.addEventListener('mouseleave', () => {
+this.container.addEventListener('mouseleave', () => {
       this.hoveredCard = null;
       this.mouse.set(-999, -999);
     });
 
-    // Pointer Down (Drag start)
-    this.container.addEventListener('pointerdown', (e) => {
+this.container.addEventListener('pointerdown', (e) => {
       if (e.target.closest('.bottom-controls') || e.target.closest('.detail-modal')) return;
       this.isDragging = true;
       this.isDragMove = false;
@@ -302,19 +272,16 @@ class FloatingGallery {
       this.previousMousePosition = { x: e.clientX, y: e.clientY };
     });
 
-    // Pointer Up
-    window.addEventListener('pointerup', () => {
+window.addEventListener('pointerup', () => {
       this.isDragging = false;
     });
 
-    // Mouse Wheel (Rotates gallery orbit smoothly around Y axis)
-    window.addEventListener('wheel', (e) => {
+window.addEventListener('wheel', (e) => {
       if (this.isDetailOpen) return;
       this.rotationVelocity += e.deltaY * 0.0007;
     }, { passive: true });
 
-    // Touch Support for mobile devices
-    this.container.addEventListener('touchstart', (e) => {
+this.container.addEventListener('touchstart', (e) => {
       if (e.touches.length === 1) {
         this.isDragging = true;
         this.isDragMove = false;
@@ -339,8 +306,7 @@ class FloatingGallery {
       this.isDragging = false;
     });
 
-    // Click on canvas for selecting card
-    this.container.addEventListener('click', (e) => {
+this.container.addEventListener('click', (e) => {
       if (this.isDragMove || this.isDetailOpen) return;
       this.raycaster.setFromCamera(this.mouse, this.camera);
       const meshes = this.cards.map(c => c.mesh);
@@ -353,19 +319,16 @@ class FloatingGallery {
       }
     });
 
-    // Close button
-    if (this.detailCloseBtn) {
+if (this.detailCloseBtn) {
       this.detailCloseBtn.addEventListener('click', () => this.closeCardDetail());
     }
 
-    // View Switcher Buttons
-    if (this.sphereBtn && this.cylinderBtn) {
+if (this.sphereBtn && this.cylinderBtn) {
       this.sphereBtn.addEventListener('click', () => this.switchView('sphere'));
       this.cylinderBtn.addEventListener('click', () => this.switchView('cylinder'));
     }
 
-    // Keyboard support: Escape closes detail
-    window.addEventListener('keydown', (e) => {
+window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.isDetailOpen) {
         this.closeCardDetail();
       }
@@ -396,13 +359,11 @@ class FloatingGallery {
     this.selectedCard = this.cards[index];
     this.selectedIndex = index;
 
-    // Hide center hero logo and bottom controls smoothly
-    if (this.centerHero) this.centerHero.classList.add('hidden-hero');
+if (this.centerHero) this.centerHero.classList.add('hidden-hero');
     if (this.wheelBackdrop) this.wheelBackdrop.classList.add('hidden-hero');
     if (this.bottomControls) this.bottomControls.classList.add('hidden-controls');
 
-    // Populate detail modal text
-    if (this.detailTitle) this.detailTitle.textContent = item.title;
+if (this.detailTitle) this.detailTitle.textContent = item.title;
     if (this.detailMeta) this.detailMeta.textContent = `${item.time} • ${item.tags ? item.tags[0] : ''}`;
     if (this.detailDesc) this.detailDesc.textContent = item.description;
 
@@ -418,8 +379,7 @@ class FloatingGallery {
       }
     }
 
-    // Show modal with GSAP
-    if (this.detailModal) {
+if (this.detailModal) {
       this.detailModal.classList.add('active');
       if (window.gsap) {
         gsap.fromTo('.detail-close-btn', { opacity: 0, y: -16 }, { opacity: 0.85, y: 0, duration: 0.4, ease: 'power3.out' });
@@ -447,8 +407,7 @@ class FloatingGallery {
       this.detailModal.classList.remove('active');
     }
 
-    // Restore center hero logo and bottom controls
-    if (this.centerHero) this.centerHero.classList.remove('hidden-hero');
+if (this.centerHero) this.centerHero.classList.remove('hidden-hero');
     if (this.wheelBackdrop) this.wheelBackdrop.classList.remove('hidden-hero');
     if (this.bottomControls) this.bottomControls.classList.remove('hidden-controls');
 
@@ -472,8 +431,7 @@ class FloatingGallery {
     const elapsedTime = this.clock.getElapsedTime();
     const isMobile = window.innerWidth < 768;
 
-    // Raycasting for card hover
-    if (!this.isDetailOpen) {
+if (!this.isDetailOpen) {
       this.raycaster.setFromCamera(this.mouse, this.camera);
       const meshes = this.cards.map(c => c.mesh);
       const intersects = this.raycaster.intersectObjects(meshes);
@@ -488,12 +446,10 @@ class FloatingGallery {
       }
     }
 
-    // Collective orbit rotation around Y axis
-    this.currentRotationY += this.rotationVelocity;
-    this.rotationVelocity *= 0.92; // Damping
+this.currentRotationY += this.rotationVelocity;
+    this.rotationVelocity *= 0.92; 
 
-    // Detail mode: smoothly align gallery orbit so selected card faces front center
-    if (this.isDetailOpen && this.selectedCard) {
+if (this.isDetailOpen && this.selectedCard) {
       const cardBasePos = this.selectedCard.targetPos;
       const targetAngleY = -Math.atan2(cardBasePos.x, cardBasePos.z);
       this.currentRotationY = THREE.MathUtils.lerp(this.currentRotationY, targetAngleY, 0.08);
@@ -505,7 +461,7 @@ class FloatingGallery {
       this.targetCamPos.set(0, cardY, distFromCenter + zOffset);
       this.targetCamLookAt.set(0, cardY, distFromCenter);
     } else {
-      // Normal Parallax Camera tilt with mouse
+      
       const targetCamX = 0.75 * this.mouseNormalized.x;
       const targetCamY = -0.38 * this.mouseNormalized.y;
 
@@ -513,41 +469,31 @@ class FloatingGallery {
       this.targetCamLookAt.set(0, 0, 0);
     }
 
-    // Smooth camera lerp
-    this.camera.position.lerp(this.targetCamPos, 0.05);
+this.camera.position.lerp(this.targetCamPos, 0.05);
     this.currentCamLookAt.lerp(this.targetCamLookAt, 0.05);
     this.camera.lookAt(this.currentCamLookAt);
 
-    // Orbit trigonometry
-    const cosOrbit = Math.cos(this.currentRotationY);
+const cosOrbit = Math.cos(this.currentRotationY);
     const sinOrbit = Math.sin(this.currentRotationY);
 
-    // Cards positioning, billboarding, opacity & scale
-    this.cards.forEach((card, i) => {
-      // Calculate 3D orbit position around center Y axis
+this.cards.forEach((card, i) => {
+      
       const orbitedX = card.targetPos.x * cosOrbit + card.targetPos.z * sinOrbit;
       const orbitedZ = -card.targetPos.x * sinOrbit + card.targetPos.z * cosOrbit;
       const orbitedY = card.targetPos.y;
 
-      // Idle vertical float bobbing
-      const seed = card.seed;
+const seed = card.seed;
       const floatY = (!this.isDetailOpen || this.selectedIndex !== i) 
         ? Math.sin(elapsedTime * 1.5 + seed) * 0.08 
         : 0;
 
-      // Lerp position to destination
-      card.mesh.position.x = THREE.MathUtils.lerp(card.mesh.position.x, orbitedX, 0.08);
+card.mesh.position.x = THREE.MathUtils.lerp(card.mesh.position.x, orbitedX, 0.08);
       card.mesh.position.y = THREE.MathUtils.lerp(card.mesh.position.y, orbitedY + floatY, 0.08);
       card.mesh.position.z = THREE.MathUtils.lerp(card.mesh.position.z, orbitedZ, 0.08);
 
-      // BILLBOARDING: Cards ALWAYS face directly towards the camera!
-      // This physically prevents any roll or spinning on their own axis!
-      card.mesh.quaternion.copy(this.camera.quaternion);
+card.mesh.quaternion.copy(this.camera.quaternion);
 
-      // Opacity & Scale logic:
-      // In default state: 100% full, rich, vibrant, saturated colors!
-      // Only when hovered: the hovered card stays 100% opaque, others fade to pale translucent!
-      if (this.isDetailOpen) {
+if (this.isDetailOpen) {
         card.targetOpacity = (this.selectedIndex === i) ? 1.0 : 0.08;
         card.targetScale = (this.selectedIndex === i) ? 1.4 : 0.95;
       } else if (this.hoveredCard !== null) {
@@ -558,8 +504,7 @@ class FloatingGallery {
         card.targetScale = 1.0;
       }
 
-      // Smooth scale and opacity transitions
-      const currentScale = THREE.MathUtils.lerp(card.mesh.scale.x, card.targetScale, 0.08);
+const currentScale = THREE.MathUtils.lerp(card.mesh.scale.x, card.targetScale, 0.08);
       card.mesh.scale.set(currentScale, currentScale, currentScale);
 
       const currentOpacity = THREE.MathUtils.lerp(
@@ -572,19 +517,16 @@ class FloatingGallery {
         card.borderMesh.material.opacity = currentOpacity * 0.45;
       }
 
-      // Keep depthWrite enabled when opaque to ensure sharp card occlusion
-      card.mesh.material.depthWrite = (card.targetOpacity >= 0.95 && currentOpacity >= 0.9);
+card.mesh.material.depthWrite = (card.targetOpacity >= 0.95 && currentOpacity >= 0.9);
     });
 
-    // Paper particles falling animation
-    this.paperParticles.forEach((p) => {
+this.paperParticles.forEach((p) => {
       p.y -= p.speed;
       p.x += 0.003 * Math.sin(elapsedTime * p.drift * 20);
       p.rotationZ += 0.2 * p.speed;
       p.rotationX += 0.1 * p.speed;
 
-      // Loop when fallen below bottom
-      if (p.y < -15) {
+if (p.y < -15) {
         p.y = 15;
         p.x = (Math.random() - 0.5) * 32;
         p.z = (Math.random() - 0.5) * 26;

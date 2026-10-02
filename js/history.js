@@ -1,9 +1,4 @@
-/**
- * History View Logic
- * Horizontal scroll with mouse wheel translation and typography animations
- */
-
-class HistoryView {
+﻿class HistoryView {
   constructor() {
     this.container = document.getElementById('view-history');
     this.progressBar = document.getElementById('history-progress');

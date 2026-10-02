@@ -1,16 +1,10 @@
-/**
- * Page Transitions & Router for ODIANEE
- * Smooth curved SVG curtain transition between separate page URLs
- */
-
-class PageRouter {
+﻿class PageRouter {
   constructor() {
     this.curtain = document.getElementById('transition-curtain');
     this.path = document.getElementById('transition-path');
     this.navLinks = document.querySelectorAll('.nav-link');
 
-    // SVG morph paths
-    this.paths = {
+this.paths = {
       start: 'M 0 0 Q 50 0 100 0 L 100 0 Q 50 0 0 0 Z',
       coverCurve: 'M 0 0 Q 50 0 100 0 L 100 100 Q 50 125 0 100 Z',
       coverFlat: 'M 0 0 Q 50 0 100 0 L 100 100 Q 50 100 0 100 Z',
@@ -23,7 +17,7 @@ class PageRouter {
   }
 
   initPageEnterAnimation() {
-    // If arriving from a transition or initial load, reveal page with upward curtain wipe
+    
     if (this.curtain && this.path && window.gsap) {
       this.curtain.style.pointerEvents = 'all';
       gsap.timeline({
@@ -43,8 +37,7 @@ class PageRouter {
         const href = link.getAttribute('href');
         if (!href) return;
 
-        // If link points to current page, do nothing
-        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+const currentPage = window.location.pathname.split('/').pop() || 'index.html';
         const targetPage = href.split('#')[0].split('/').pop() || 'index.html';
 
         if (currentPage === targetPage && !href.includes('#')) {
@@ -52,8 +45,7 @@ class PageRouter {
           return;
         }
 
-        // If internal HTML page navigation, do curtain wipe transition
-        if (href.endsWith('.html') || href === '/' || href === 'index.html') {
+if (href.endsWith('.html') || href === '/' || href === 'index.html') {
           e.preventDefault();
           this.navigateToUrl(href);
         }
