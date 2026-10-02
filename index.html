@@ -293,8 +293,8 @@
 
   <div class="cursor-hint">Drag or scroll to rotate &bull; Click to inspect</div>
 
-<script src="js/data.js?v=2"></script>
-  <script src="js/gallery.js?v=2"></script>
+<script src="js/data.js?v=3"></script>
+  <script src="js/gallery.js?v=3"></script>
   <script src="js/history.js"></script>
   <script src="js/process.js"></script>
   <script src="js/transitions.js"></script>
@@ -302,6 +302,7 @@
   <script>window.addEventListener('DOMContentLoaded', () => {
       
       const gallery = new FloatingGallery();
+      window.floatingGallery = gallery;
 
 const historyView = new HistoryView();
 

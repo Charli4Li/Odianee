@@ -306,14 +306,23 @@ this.container.addEventListener('touchstart', (e) => {
 
 this.container.addEventListener('click', (e) => {
       if (this.isDragMove || this.isDetailOpen) return;
+      if (e.clientX !== undefined && e.clientY !== undefined) {
+        this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      }
       this.raycaster.setFromCamera(this.mouse, this.camera);
       const meshes = this.cards.map(c => c.mesh);
-      const intersects = this.raycaster.intersectObjects(meshes);
+      const intersects = this.raycaster.intersectObjects(meshes, true);
 
       if (intersects.length > 0) {
-        const hit = intersects[0].object;
-        const data = hit.userData;
-        this.openCardDetail(data.item, data.index);
+        let hit = intersects[0].object;
+        while (hit && (!hit.userData || !hit.userData.item) && hit.parent) {
+          hit = hit.parent;
+        }
+        if (hit && hit.userData && hit.userData.item) {
+          const data = hit.userData;
+          this.openCardDetail(data.item, data.index);
+        }
       }
     });
 
@@ -353,6 +362,7 @@ window.addEventListener('keydown', (e) => {
   }
 
   openCardDetail(item, index) {
+    if (!item) return;
     this.isDetailOpen = true;
     this.selectedCard = this.cards[index];
     this.selectedIndex = index;
@@ -365,6 +375,13 @@ if (this.detailTitle) this.detailTitle.textContent = item.title;
     if (this.detailDesc) this.detailDesc.textContent = item.description;
 
 if (this.detailModal) {
+      if (window.gsap) {
+        gsap.killTweensOf(this.detailModal);
+        gsap.killTweensOf('.detail-close-btn');
+        gsap.killTweensOf('.detail-title-col');
+        gsap.killTweensOf('.detail-desc-col');
+      }
+      this.detailModal.style.opacity = '';
       this.detailModal.classList.add('active');
       if (window.gsap) {
         gsap.fromTo('.detail-close-btn', { opacity: 0, y: -16 }, { opacity: 0.85, y: 0, duration: 0.4, ease: 'power3.out' });
