@@ -1,93 +1,103 @@
-﻿const ARTS_DATA = [
+const ARTS_DATA = [
   {
     id: 1,
-    slug: "radha-krishna",
-    title: "Radha & Krishna",
-    image: "assets/arts/art-1.webp",
-    time: "18th Century",
-    tags: ["Kangra School", "Bhakti", "Radha-Krishna", "Monsoon"],
-    description: "The Kangra masters understood something that most painters have missed: that the most charged romantic moment is not the touch, but the instant before it. Here, Radha and Krishna stand beneath a monsoon sky — her eyes lowered, his smile barely contained. The forest around them mirrors their feeling: every vine curls toward every branch, every bird pairs with another. Nature conspires. The artist watches."
+    slug: "1",
+    title: "1",
+    roman: "I",
+    image: "assets/front page/1.png",
+    time: "",
+    tags: [],
+    description: ""
   },
   {
     id: 2,
-    slug: "bhairavi-ragini",
-    title: "Bhairavi Ragini",
-    image: "assets/arts/art-2.webp",
-    time: "Early Pahari",
-    tags: ["Basohli School", "Ragamala", "Music", "Devotion", "Beetle-wing"],
-    description: "The earliest and most electrifying of the Pahari schools, Basohli produced paintings with the intensity of a struck bell. The colours are unmixed, unafraid. The figures are architectural — bold outlines, prominent eyes, jewellery that seems almost sculptural. This Bhairavi Ragini was part of a Ragamala series — a visual meditation on musical modes and the emotions they invoke. She sits in the hour before dawn, in the mode of quiet longing, surrounded by a silence the painting somehow makes audible."
+    slug: "2",
+    title: "2",
+    roman: "II",
+    image: "assets/front page/2.png",
+    time: "",
+    tags: [],
+    description: ""
   },
   {
     id: 3,
-    slug: "nala-damayanti",
-    title: "Nala & Damayanti",
-    image: "assets/arts/art-3.webp",
-    time: "Early Pahari",
-    tags: ["Guler School", "Mahabharata", "Nala-Damayanti", "Narrative", "Naturalism"],
-    description: "The Guler school is where Pahari painting grew up. The bold, almost graphic intensity of Basohli gave way to something more searching — softer backgrounds, more nuanced expressions, a growing interest in landscape and atmosphere. This scene from the Nala-Damayanti story captures the instant of recognition: surrounded by identical gods, Damayanti finds the real Nala by the way he blinks, the way he sweats, the way he stands on the earth instead of hovering above it. Mortality, the painting suggests, is itself a form of grace."
+    slug: "3",
+    title: "3",
+    roman: "III",
+    image: "assets/front page/3.png",
+    time: "",
+    tags: [],
+    description: ""
   },
   {
     id: 4,
-    slug: "shiva-parvati",
-    title: "Shiva & Parvati",
-    image: "assets/arts/art-4.webp",
-    time: "18th Century",
-    tags: ["Mandi School", "Shaivism", "Shiva-Parvati", "Kailash", "Cosmological"],
-    description: "In the Mandi tradition, even the largest cosmic drama is rendered with an intimacy that makes the divine feel approachable. Shiva is not performing his godhood here — he is simply at home, the mountain his armchair, Parvati beside him, the universe stretching out below like a garden. The gold in this painting is not decorative. It is literal: the halo of the eternal, the shimmer at the edge of the knowable world."
+    slug: "4",
+    title: "4",
+    roman: "IV",
+    image: "assets/front page/4.png",
+    time: "",
+    tags: [],
+    description: ""
   },
   {
     id: 5,
-    slug: "lady-at-her-toilette",
-    title: "Lady at Her Toilette",
-    image: "assets/arts/art-5.webp",
-    time: "Late 18th Century",
-    tags: ["Kangra School", "Nayika", "Secular", "Portrait", "Femininity"],
-    description: "The nayika paintings of Kangra are, in many ways, the school's most psychologically rich works. Here is a woman entirely absorbed in the art of becoming. The mirror she holds shows us her face from a second angle — we see both the act and its reflection, the woman and the image she constructs. Around her, the ordinary world: a lamp, a tray of cosmetics, a maid arranging flowers. The Kangra master renders all of this with the same attention — the human and the object equally precious, equally alive."
+    slug: "5",
+    title: "5",
+    roman: "V",
+    image: "assets/front page/5.png",
+    time: "",
+    tags: [],
+    description: ""
   },
   {
     id: 6,
-    slug: "krishna-lifts-govardhan",
-    title: "Krishna Lifts Govardhan",
-    image: "assets/arts/art-6.webp",
-    time: "Early Pahari",
-    tags: ["Chamba School", "Krishna", "Govardhan", "Bhakti", "Community"],
-    description: "Chamba's paintings have a warmth and golden luminosity that distinguishes them from the cooler, more linear Kangra tradition. In this celebrated scene, the child-god Krishna holds an entire mountain aloft on his little finger — and the painting somehow makes this feel not miraculous but inevitable, natural, sweet. The villagers who shelter beneath it look less frightened than comforted, as if this is exactly where they were always meant to be."
+    slug: "6",
+    title: "6",
+    roman: "VI",
+    image: "assets/front page/6.png",
+    time: "",
+    tags: [],
+    description: ""
   },
   {
     id: 7,
-    slug: "lovers-by-night",
-    title: "Lovers by Night",
-    image: "assets/arts/art-7.webp",
-    time: "Early Pahari",
-    tags: ["Kangra School", "Night", "Romance", "Architecture", "Silver Paint"],
-    description: "The Kangra school painted night better than almost anyone in the history of Indian art. The deep blue grounds — lapis and indigo mixed and layered — gave their nocturnal scenes a depth that daylight paintings never achieved. In this intimate work, a couple shares a moonlit terrace; the river below is silver, the sky is the blue of deep water, and the pavilion is a small warm world against all that darkness. Romantic, yes. But also something more: a meditation on sanctuary."
+    slug: "7",
+    title: "7",
+    roman: "VII",
+    image: "assets/front page/7.png",
+    time: "",
+    tags: [],
+    description: ""
   },
   {
     id: 8,
-    slug: "durga-mahishasura",
-    title: "Durga & Mahishasura",
-    image: "assets/arts/art-8.webp",
-    time: "Early Pahari",
-    tags: ["Basohli School", "Durga", "Devi", "Mahishasura", "Shakti", "Narrative"],
-    description: "The gods of Basohli are terrifying and beautiful in equal measure. This Durga — her multiple arms holding trident, sword, conch, lotus, and thunderbolt — moves through the painting like a force of nature that has taken on form simply because form was needed. The demon beneath her is detailed, almost sympathetic; his defeat is painted without cruelty. The Basohli tradition understood that the Goddess does not hate what she destroys. She simply will not allow it to continue."
+    slug: "8",
+    title: "8",
+    roman: "VIII",
+    image: "assets/front page/8.png",
+    time: "",
+    tags: [],
+    description: ""
   },
   {
     id: 9,
-    slug: "the-hawking-prince",
-    title: "The Hawking Prince",
-    image: "assets/arts/art-9.webp",
-    time: "Early Pahari",
-    tags: ["Guler-Kangra", "Portraiture", "Royal Court", "Landscape", "Hawking"],
-    description: "In the transitional moment between Guler and Kangra, Pahari painting discovered the world outside the court. Landscape appears not as backdrop but as presence — the hills have weather, the sky has distance, the river is a living thing. This prince with his hawk inhabits a real world, not just a symbolic one. The painting is a portrait, yes, but also an argument: that power in the Pahari hills was inseparable from the land it came from."
+    slug: "9",
+    title: "9",
+    roman: "IX",
+    image: "assets/front page/9.png",
+    time: "",
+    tags: [],
+    description: ""
   },
   {
     id: 10,
-    slug: "sawan-month-of-rain",
-    title: "Sawan - Month of Rain",
-    image: "assets/arts/art-10.webp",
-    time: "Early Pahari",
-    tags: ["Kangra School", "Baramasa", "Seasons", "Nayika", "Rain", "Longing"],
-    description: "In a Baramasa series, each of the twelve months is painted as a specific emotional state, mapped onto a specific woman in a specific landscape. Sawan is the month of rain and longing. The clouds that bring relief to the earth bring only ache to the nayika, the heroine, who waits for her absent lover. Everything in this painting is calling to everything else: peacock to rain, vine to tree, woman to a horizon that offers nothing back. Kangra at its most heartbreaking. Kangra at its best."
+    slug: "10",
+    title: "10",
+    roman: "X",
+    image: "assets/front page/10.png",
+    time: "",
+    tags: [],
+    description: ""
   }
 ];
 
