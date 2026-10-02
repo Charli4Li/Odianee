@@ -234,7 +234,8 @@ nav.main-nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: subtleFloat 6s ease-in-out infinite;
+  margin: 0;
+  padding: 0;
   transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
@@ -243,6 +244,16 @@ nav.main-nav {
   opacity: 0;
   transform: translate(-50%, -55%) scale(0.92);
   pointer-events: none;
+}
+
+.wheel-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  animation: subtleFloat 6s ease-in-out infinite;
 }
 
 .center-chakra-wheel {
